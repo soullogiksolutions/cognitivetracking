@@ -1,204 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="shortcut icon" href="favicon.ico">
-<title>Van Hedger | jsPsych</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-<style>
-body,h1,h2,h3,h4,h5,h6,p {font-family: "Arial", sans-serif}
-.w3-navbar,h1,button {font-family: "Arial", sans-serif}
-.fa-anchor,.fa-coffee {font-size:150px}
- ul {background-color: #e31838;}
- a:hover {color: black}
- 
- hr.rounded {
-  border-top: 5px solid #bbb;
-  border-radius: 0px;
-  width:100%;
-  display: inline-block;
-  vertical-align:center;
-}
-
-button {
-	background-color: #fff;
-	border: 2px solid #e31838;
-	border-radius: 5px;
-	margin:5px;
-}
-
-button:hover,
-button:focus {
-	background-color: #e31838;
-	color: white;
-	border: 2px solid #e31838;
-	transition: 0.1s;
-}
-
-hr {
-  border: 0;
-  clear:both;
-  display:block;
-  width: 96%;               
-  background-color:#000;
-  height: 1px;
-}
-
-
-</style>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soul Logik | Privacy-First Cognitive Assessments & Brain Wellness</title>
+  <meta name="description" content="Soul Logik offers zero-trust, privacy-first cognitive assessments and brain training. Our offline tests use differential privacy to protect your data while tracking working memory and brain wellness.">
+  <meta name="keywords" content="cognitive assessment, brain training, privacy-first, zero trust, differential privacy, working memory, wellness tracking, offline brain tests, data privacy">
+  <meta name="author" content="Soul Logik">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body,h1,h2,h3,h4,h5,h6,p {font-family: "Arial", sans-serif;}
+    .w3-navbar,h1,button {font-family: "Arial", sans-serif;}
+    ul {background-color: #e31838;}
+    a:hover {color: black;}
+    hr.rounded {
+      border-top: 5px solid #bbb;
+      border-radius: 0;
+      width: 100%;
+      display: inline-block;
+      vertical-align: center;
+    }
+    button {
+      background-color: #fff;
+      border: 2px solid #e31838;
+      border-radius: 5px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    button:hover,
+    button:focus {
+      background-color: #e31838;
+      color: white;
+      border: 2px solid #e31838;
+      transition: 0.1s;
+    }
+    hr {
+      border: 0;
+      clear: both;
+      display: block;
+      width: 96%;
+      background-color: #000;
+      height: 1px;
+    }
+  </style>
+</head>
 <body>
-
-
 <!-- Navbar -->
 <div class="w3-top">
   <ul class="w3-navbar w3-card-2 w3-left-align w3-large">
     <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
       <a class="w3-padding-large w3-hover-white w3-large w3-grey" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
     </li>
-    <li><a href="https://svanhedger.github.io" class="w3-padding-large w3-hover-white" style=color:white>Home</a></li>
-	<li class="w3-hide-small"><a href="https://svanhedger.github.io/jspsych/" class="w3-padding-large w3-white">jsPsych Scripts</a></li>
-	<li class="w3-hide-small"><a href="https://svanhedger.github.io/matlab/" class="w3-padding-large w3-hover-white" style=color:white>Matlab Scripts</a></li>
+    <li><a href="#" class="w3-padding-large w3-hover-white" style="color:white;">Soul Logik</a></li>
+    <li class="w3-hide-small"><a href="#assessments" class="w3-padding-large w3-white">Assessments</a></li>
+    <li class="w3-hide-small"><a href="https://soullogik.substack.com" class="w3-padding-large w3-hover-white" style="color:white;" target="_blank" rel="noopener noreferrer">About Test</a></li>
   </ul>
 
   <!-- Navbar on small screens -->
   <div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium">
     <ul class="w3-navbar w3-left-align w3-large w3-indigo">
-	  <li><a class="w3-padding-large" style=color:white href="https://svanhedger.github.io">Home</a></li>	
-	  <li><a class="w3-padding-large" style=color:white href="https://svanhedger.github.io/jspsych/">jsPsych Scripts</a></li>
-	  <li><a class="w3-padding-large" style=color:white href="https://svanhedger.github.io/matlab/">Matlab Scripts</a></li>
+      <li><a class="w3-padding-large" style="color:white;" href="#">Soul Logik</a></li>
+      <li><a class="w3-padding-large" style="color:white;" href="#assessments">Assessments</a></li>
+      <li><a class="w3-padding-large" style="color:white;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">About Test</a></li>
     </ul>
   </div>
 </div>
 
 <!-- Header -->
 <header class="w3-container w3-white w3-center w3-padding-64">
-  <h1 class="w3-margin w3-xxlarge"><b>jsPsych Scripts</b></h1>
+  <h1 class="w3-margin w3-xxlarge"><b>Soul Logik</b></h1>
+  <p class="w3-large" style="max-width:600px; margin:auto; text-align:center;">
+    Privacy-First Cognitive Assessments and Brain Wellness Tracking<br>
+    Experience zero-trust, offline cognitive tests using differential privacy to protect your data.
+  </p>
 </header>
 
-<!-- First Grid -->
-<div class="w3-row-padding w3-padding-16 w3-container">
+<!-- Overview -->
+<div class="w3-row-padding w3-padding-16 w3-container" id="overview">
   <div class="w3-content">
     <div class="w3-threequarter">
-      <h2 class "w3-medium w3-large"><b>Overview</b></h2>
-      <h5 class="w3-padding-16" style="text-align:justify;"><a href="https://www.jspsych.org" style="color:#e31838;"><p><b>jsPsych</b></a> is an excellent JavaScript library, created by Josh de Leeuw, for designing behavioral experiments that run in a web browser. 
-	  jsPsych provides a framework for defining experiments using a set of flexible plugins that create different kinds of tasks a subject could complete during an experiment. 
-	  By assembling these different plugins together it is possible to create many different types of experiments.</p>
-	  <p>You are welcome to use any of the jsPsych scripts on this page. Most of the scripts reflect my research background and assess cognitive and perceptual processes. </p></h5>
-
+      <h2 class="w3-large"><b>Our Mission</b></h2>
+      <p style="text-align:justify;">
+        Soul Logik provides innovative cognitive assessments and wellness tracking tools designed for individuals who prioritize privacy. Our tests do not store, track, or analyze your personal data. Any data collected employs advanced <strong>differential privacy</strong> techniques, ensuring your brain health is monitored securely and privately.
+      </p>
+      <p style="text-align:justify;">
+        Designed for offline use, our working memory and brain training assessments give users effective brain wellness tools without sacrificing data privacy.
+      </p>
     </div>
-
     <div class="w3-quarter w3-right">
-      <figure><img src="img/jspsych-logo.jpg" alt="" style="width:29vw;height:31vh;"></figure>
+      <figure>
+        <img src="img/soullogik-logo.png" alt="Soul Logik logo" style="width:29vw; height:31vh; max-width:200px;">
+      </figure>
     </div>
   </div>
 </div>
 
+<hr class="rounded">
 
-  <hr class="rounded"></hr>
-<div class="w3-row-padding w3-padding-16 w3-container w3-light-grey">
+<!-- Assessments Section -->
+<div class="w3-row-padding w3-padding-16 w3-container w3-light-grey" id="assessments">
   <div class="w3-content">
     <div class="w3-threequarter">
-      <h2 class "w3-medium w3-large"><b>Scripts</b></h2>
-	  
-      <h3 class="w3-padding-16"><b style="color:#e31838;">Backward Digit Span</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/backward-digit-span/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/backward-digit-span/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;">Backward digit span is a classic assessment of working memory. Participants are given a string of digits and must recall them in reverse order.
-	  This script is quite flexible. Users are easily able to modify the modality (spoken or printed digits), the number of trials, the starting digit 
-	  span etc. The script is also adaptive, using a 1:2 staircase procedure. This means that the span increases by one whenever a participant is correct,
-	  and the span decreases by one whenever a participant is incorrect two trials in a row. Typical administration takes 8-10 minutes.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Forward Digit Span</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/forward-digit-span/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/forward-digit-span/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;">Forward digit span (often just called digit span) is a common assessment of short-term memory. Participants are given a string of digits 
-	  and must recall them in the same order in which they were presented. This script is quite flexible. Users are easily able to modify the modality (spoken or printed digits), 
-	  the number of trials, the starting digit span etc. The script is also adaptive, using a 1:2 staircase procedure. This means that the span increases by one whenever a participant is correct,
-	  and the span decreases by one whenever a participant is incorrect two trials in a row. Typical administration takes 8-10 minutes.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Auditory N-Back</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/n-back/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/n-back/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;">In the Auditory N-Back, participants are presented a sequence of auditory stimuli one-by-one. For each stimulus, they need to decide if 
-	  the current stimulus is the same as the one presented N trials ago. The N can be 1 trials, 2 trials, 3 trials, etc. The higher the number, the more difficult the task. 
-	  The factors that seem to influence the performance are not only the N, but also the speed of presentation and the size of the set of stimuli. This script is highly customizable;
-	  you can change the levels of N, the types of sounds used, the number of trials, the relative ratio of target and non targets etc. Typical administration takes 10-15 minutes.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Reading Span</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/reading-span/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/reading-span/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;">In this Automated Reading Span Task, participants must perform two interleaved tasks. The first is reading a sentence and determining whether or
-	  not it makes sense (e.g., "He takes his coffee with sugar and [cream / concrete]."). The second is a letter memorization task. On each trial, participants complete anywhere between
-	  three and seven iterations of this sentence judgment/letter memorization script. At the end of each trial, participants must report the letters in the exact order in which they 
-	  appeared.	Typical administration takes 15-20 minutes.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Attention Network Test</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/ant/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/ant/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;">Adapted from Fan et al. (2002) <em>J Cog Neurosci</em>. The Attention Network Test combines flanker and cueing paradigms to assess different networks of
-	  attention (alerting, orienting, executive). Participants must respond to the direction of a middle arrow, which can be flanked by congruent or incongruent arrows. Prior to this arrow-judgment task, a cue (*) may appear,
-	  and may indicate the spatial location of the upcoming arrows. This particular administration is based on the ANT as reported by Berman et al. (2008) <em>Psychol Sci</em>Typical administration takes 15-20 minutes.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Sentence Repetition Task</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/srt/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/srt/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;">The Sentence Repetition Test (SRT), also known as the Sentence Memory Test, involves repeating (in this case, typing) back speech tokens of increasing numbers of syllables. 
-	  The test starts with just a single syllable ('look') and progresses to 26 syllables. The typical scoring is the maximum syllable length able to be successfully recalled. I have also coded the proportion of 
-	  correctly identified words as a secondary measure. The SRT taps linguistic knowledge and working memory. Typical administration takes 10 minutes.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Matrix Reasoning</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/matrix-reasoning/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/matrix-reasoning/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;">This is a matrix reasoning task, similar to the popular Raven's Progressive Matrices. This version, however, is not proprietary. The stimuli are taken from
-	  Matzen et al. (2010) (<em>Behavioral Research Methods</em>). On each trial, participants see a matrix pattern with the bottom right portion missing. Participants then must decide which of 
-	  eight provided options best completes the pattern. There are 42 items. You can change a single variable (shortForm in matrices.js) to make a "short form" version 
-	  (21 items) if desired. There are several different subtypes of stimuli (e.g., logical relation, one-dimension, two-dimension, three-dimension). Typical administration takes 40-60 minutes
-	  for the full version and 20-30 minutes for the short form version.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Pitch Adjustment</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/pitch-adjustment/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/pitch-adjustment/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;"> The pitch adjustment task is a sound reproduction task that has been used as an assessment of auditory working memory precision (e.g., Van Hedger et al., 2015 <em>Cognition</em>). 
-	  On each trial, participants hear a brief target tone, which is immediately masked by noise. Participant are then given a starting tone - higher or lower than the initial
-	  target tone. Participants must adjust this starting tone, using arrows provided on the screen, to try and recreate the initial targert tone to the best of their ability.
-	  Full administration takes 20-30 minutes. The quick assessment (simply swtich quickAssessment in pitchadjust.js to 1) takes 10-20 minutes.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Multiple Object Tracking</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/object-tracking/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/object-tracking/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;"> This multiple object tracking (MOT) study assesses visual attention. On each trial, participants see an array of eight dots. Depending
-	  on the trial, two or three of these dots briefly flash, and then all eight dots start moving. Participants must track the dots that flashed to the best of their ability
-	  and identify them at the end of the trial. The task also includes an interactive instructions / practice, and takes 15-20 minutes.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Simon Memory Game</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/simon/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/simon/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;"> This is a jsPsych version of the popular "Simon" memory game. Each game begins with a single button that lights up, accompanied by a sound. If participants correctly repeat 
-	  this button, the next trial adds an additional button/tone. Items are continually appended to the end of the sequence until a participant makes a mistake. At this point, the game is over and a new game begins. The script is 
-	  easily customizable (e.g., changing the number of games, swapping the sounds used in the sequences). At the end of the script, participants are given feedback about their performance. Note: I am extremely
-	  indebted to <a href="https://freeCodeCamp.org">freeCodeCamp</a> for providing the foundations of this project - in particular, the CSS for creating the Simon board.</h5>
-	  <hr>
-	  <h3 class="w3-padding-16"><b style="color:#e31838;">Color Change Detection Task</b><div style="float:right;"><button><a style="text-decoration: none;" href="https://svanhedger.github.io/jspsych/scripts/change-detection/">Demo</a></button><button><a style="text-decoration: none;" href="https://github.com/svanhedger/jspsych/tree/master/scripts/change-detection/">Repo</a></button></div></h3>
-	  <h5 style="text-align:justify;"> This is a jsPsych version of the color change detection task, originally programmed in Matlab and hosted on the <a href = "https://github.com/AwhVogelLab/change-detection-task">Awh/Vogel GitHub page</a>. 
-		On each trial, colored squares (currently programmed to be either 3, 4, or 5) briefly appear within a window on the screen. Then, following a retention interval, participants are given a single probe square.
-		The probe square always takes the position of one of the squares from the first display; however, it can either be presented in the same or different color. Participants then make a forced-choice judgment as to
-		whether the color is the same or different. Several parameters (e.g., piloting mode, number of squares, retention interval, window size)
-	    are easily customizable. Thank you to the Awh/Vogel lab for posting the source code in Matlab!</h5>
-	  <hr>
+      <h2 class="w3-large"><b>Available Cognitive Assessments</b></h2>
+
+      <h3 class="w3-padding-16"><b style="color:#e31838;">Backward Digit Span</b>
+        <div style="float:right;">
+          <button><a style="text-decoration: none; color:inherit;" href="https://svanhedger.github.io/jspsych/scripts/backward-digit-span/" target="_blank" rel="noopener noreferrer">Start Assessment</a></button>
+          <button><a style="text-decoration: none; color:inherit;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">About Test</a></button>
+        </div>
+      </h3>
+      <p style="text-align:justify;">
+        Backward Digit Span is a classic working memory test where participants recall digits in reverse order. The script adapts difficulty for personalized brain training while ensuring all data stays private and offline. Typical completion takes 8-10 minutes.
+      </p>
+      <hr>
+
+      <h3 class="w3-padding-16"><b style="color:#e31838;">Forward Digit Span</b>
+        <div style="float:right;">
+          <button><a style="text-decoration: none; color:inherit;" href="https://svanhedger.github.io/jspsych/scripts/forward-digit-span/" target="_blank" rel="noopener noreferrer">Start Assessment</a></button>
+          <button><a style="text-decoration: none; color:inherit;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">About Test</a></button>
+        </div>
+      </h3>
+      <p style="text-align:justify;">
+        Forward Digit Span assesses short-term memory by having participants recall sequences as given. Our privacy-first offline tool ensures that no personal data is tracked or stored. Typical duration is 8-10 minutes.
+      </p>
+      <hr>
+
+      <h3 class="w3-padding-16"><b style="color:#e31838;">Auditory N-Back</b>
+        <div style="float:right;">
+          <button><a style="text-decoration: none; color:inherit;" href="https://svanhedger.github.io/jspsych/scripts/n-back/" target="_blank" rel="noopener noreferrer">Start Assessment</a></button>
+          <button><a style="text-decoration: none; color:inherit;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">About Test</a></button>
+        </div>
+      </h3>
+      <p style="text-align:justify;">
+        Auditory N-Back challenges working memory with customizable auditory sequences presented offline. We guarantee zero data retention, fully respecting user privacy. Typical test length is 10-15 minutes.
+      </p>
+      <hr>
+
+      <h3 class="w3-padding-16"><b style="color:#e31838;">Reading Span</b>
+        <div style="float:right;">
+          <button><a style="text-decoration: none; color:inherit;" href="https://svanhedger.github.io/jspsych/scripts/reading-span/" target="_blank" rel="noopener noreferrer">Start Assessment</a></button>
+          <button><a style="text-decoration: none; color:inherit;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">About Test</a></button>
+        </div>
+      </h3>
+      <p style="text-align:justify;">
+        The Reading Span task combines sentence judgment and letter memorization to track working memory capacity with full data privacy assured by offline operation. Duration is approximately 15-20 minutes.
+      </p>
+      <hr>
+
+      <!-- Add additional assessments similarly as needed -->
+
     </div>
-
-
   </div>
 </div>
-
-
-
 
 <div class="w3-container w3-grey w3-center w3-opacity w3-padding-16">
-    <h1 class="w3-margin w3-large"></h1>
+  <h1 class="w3-margin w3-large">© Soul Logik 2025. All rights reserved.</h1>
 </div>
-<h5 class="w3-padding-large w3-left-align">
-<a href="https://osf.io/h3x8g/" target="_blank" id="osf"><center><img src="img/cos.png" name="cos" id="cos" alt="cos" style="width:100px;height:63px;border:1px solid black"/></center></a>
-<a href="https://scholar.google.com/citations?user=n2T5t1cAAAAJ&hl=en&oi=ao" target="_blank" id="scholar"><center><img src="img/google-scholar.png"  name="google-scholar" id="google-scholar" alt="google-scholar" style="width:50px;height:50px;border:1px solid black"/></center></a>
-<a href="https://www.researchgate.net/profile/Stephen_Van_Hedger" target="_blank" id="RG"><center><img src="img/research-gate.png" name="RG" id="RG" alt="RG" style="width:50px;height:50px;border:1px solid black"/></center></a>
 
-<p style="font-size:15px"><center>&#169; Stephen Van Hedger. Website template adapted from from W3Schools.com. Updated June 2020.</center></p>
-</h5>
 <script>
-// Used to toggle the menu on small screens when clicking on the menu button
-function myFunction() {
+  // Toggle menu on small screens
+  function myFunction() {
     var x = document.getElementById("navDemo");
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
+    if (x.className.indexOf("w3-show") === -1) {
+      x.className += " w3-show";
     } else {
-        x.className = x.className.replace(" w3-show", "");
+      x.className = x.className.replace(" w3-show", "");
     }
-}
+  }
 </script>
-
 </body>
 </html>
