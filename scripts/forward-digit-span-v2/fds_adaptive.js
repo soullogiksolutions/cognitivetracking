@@ -13,10 +13,28 @@ var fds_correct_ans;
 var stimList;
 var idx = 0;
 var exitLetters = false;
-var folder = "digits/";
+var folder = "digits/"; // folder at same level as JS script
+
+// Map digit numbers to word-based filenames
+var fileMap = {
+  1: "one.wav",
+  2: "two.wav",
+  3: "three.wav",
+  4: "four.wav",
+  5: "five.wav",
+  6: "six.wav",
+  7: "seven.wav",
+  8: "eight.wav",
+  9: "nine.wav"
+};
+
+function digitToFile(digit) {
+  return folder + fileMap[digit];
+}
+
 var digit_list = [1,2,3,4,5,6,7,8,9];
 
-// Create global AudioContext variable
+// AudioContext global variable
 var audioContext;
 
 // Helpers
@@ -45,7 +63,7 @@ function getStimuli(len) {
   currentDigitList = getDigitList(len);
   for(let d of currentDigitList) {
     if(useAudio) {
-      stimList.push(folder + d + ".wav");
+      stimList.push(digitToFile(d));
     } else {
       stimList.push(`<p style="font-size:60px; font-weight:600; text-align:center;">${d}</p>`);
     }
@@ -64,14 +82,14 @@ function clearResponse() {
   document.getElementById("echoed_txt").innerHTML = "";
 }
 
-// Preload audios
-var aud_digits = digit_list.map(d=>folder + d + ".wav");
+// Preload audios for digits with word-based filenames
+var aud_digits = digit_list.map(d => digitToFile(d));
 var preload_digits = {
   type: 'preload',
   audio: aud_digits,
 };
 
-// Welcome screen with audio context resume on Continue
+// Welcome screen - resume AudioContext on Continue button click
 var fds_welcome = {
   type: 'html-button-response',
   stimulus: `
@@ -98,7 +116,7 @@ var fds_welcome = {
     });
   },
   on_finish: function(data) {
-    // Resume or create AudioContext after user gesture
+    // Create or resume AudioContext on user gesture
     if (useAudio) {
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -109,7 +127,7 @@ var fds_welcome = {
         });
       }
     }
-    // Set number of trials and reset variables
+    // Get number of trials and initialize variables
     let nt = parseInt($('#numTrials').val());
     if(!isNaN(nt) && nt >=3 && nt <= 50) {
       fdsTotalTrials = nt;
@@ -125,7 +143,7 @@ var fds_welcome = {
   },
 };
 
-// Setup trial
+// Setup trial screen
 var setup_fds = {
   type: 'html-button-response',
   stimulus: function() {
@@ -168,7 +186,7 @@ var letter_fds_vis = {
   }
 };
 
-// Letter procedure timelines
+// Procedures for letter presentation
 var letter_proc_audio = {
   timeline: [letter_fds],
   loop_function: function() { return !exitLetters; }
@@ -178,7 +196,7 @@ var letter_proc_visual = {
   loop_function: function() { return !exitLetters; }
 };
 
-// Response screen HTML
+// Response grid HTML
 var response_grid = `
 <div style="text-align:center;">
   <p>What were the numbers <b>in order</b>?</p>
@@ -246,5 +264,5 @@ if(useAudio) {
 timeline.push(fds_response_screen);
 timeline.push(fds_wrapup);
 
-// Initialize
+// Initialize jsPsych
 jsPsych.init({ timeline: timeline });
