@@ -172,5 +172,38 @@
     }
   }
 </script>
+
+<!-- FAQ Section -->
+<div class="w3-container w3-padding-16" id="faq">
+  <h2 class="w3-large"><b>Frequently Asked Questions</b></h2>
+  
+  <button onclick="toggleFAQ('q1')" class="w3-button w3-block w3-left-align w3-light-grey w3-margin-top">What data do you track?</button>
+  <div id="q1" class="w3-hide w3-container w3-white w3-padding">
+    <p>We do not track any personal data in our cognitive assessments. The About page links to our Substack blog where Google Analytics is used as detailed in their privacy policy.</p>
+  </div>
+
+  <button onclick="toggleFAQ('q2')" class="w3-button w3-block w3-left-align w3-light-grey w3-margin-top">How do the assessments protect my privacy?</button>
+  <div id="q2" class="w3-hide w3-container w3-white w3-padding">
+    <p>Assessments run in private browser tabs (Incognito mode) with JavaScript enabled and do not store or track your data. They operate fully offline to ensure your privacy.</p>
+  </div>
+  
+  <button onclick="toggleFAQ('q3')" class="w3-button w3-block w3-left-align w3-light-grey w3-margin-top">Is this medical advice?</button>
+  <div id="q3" class="w3-hide w3-container w3-white w3-padding">
+    <p>No, these tools are not intended as medical advice and should not be used for diagnosis.</p>
+  </div>
+</div>
+
+<script>
+  // Toggle FAQ answer display
+  function toggleFAQ(id) {
+    var x = document.getElementById(id);
+    if (x.className.indexOf("w3-show") == -1) {
+      x.className += " w3-show";
+    } else {
+      x.className = x.className.replace(" w3-show", "");
+    }
+  }
+</script>
+
 </body>
 </html>
