@@ -101,7 +101,8 @@ var fds_welcome = {
     });
   },
   on_finish: function(){
-    let nt = parseInt(document.getElementById('numTrials').value);
+    // Use jQuery's .val() safely (fixes error reading .value from null)
+    let nt = parseInt($('#numTrials').val());
     if(!isNaN(nt) && nt >= 3 && nt <= 50){
       fdsTotalTrials = nt;
     }
@@ -159,14 +160,13 @@ var letter_fds_vis = {
   }
 };
 
-// Letter presentation loop - use either audio or visual timeline
+// Letter presentation loop - audio and visual variants
 var letter_proc_audio = {
   timeline: [letter_fds],
   loop_function: function(){
     return !exitLetters;
   }
 };
-
 var letter_proc_visual = {
   timeline: [letter_fds_vis],
   loop_function: function(){
@@ -210,7 +210,6 @@ var fds_response_screen = {
     }
     response = [];
     fdsTrialNum++;
-    // Log trial data (optional)
     jsPsych.data.addDataToLastTrial({
       designation: 'FDS-RESPONSE',
       span: currentSpan,
@@ -233,22 +232,17 @@ var fds_wrapup = {
 };
 
 // Main adaptive procedure timeline
-var fds_adaptive = {
-  timeline: [fds_welcome, setup_fds],
-  loop_function: function(){
-    return (fdsTrialNum <= fdsTotalTrials && wrongCount < 3);
-  }
-};
-
-// Compose full experiment timeline with conditional letter presentation
 var timeline = [];
+
 timeline.push(fds_welcome);
 timeline.push(setup_fds);
+
 if(useAudio){
   timeline.push(letter_proc_audio);
 } else {
   timeline.push(letter_proc_visual);
 }
+
 timeline.push(fds_response_screen);
 timeline.push(fds_wrapup);
 
