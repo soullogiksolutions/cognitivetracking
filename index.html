@@ -12,40 +12,45 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <style>
+ <style>
+  /* Base typography and colors */
   body, h1, h2, h3, h4, h5, h6, p {
     font-family: "Arial", sans-serif;
-    color: #333;
+    color: #222222;
+    background-color: #F4F4F9;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
   }
 
   .w3-navbar, h1, button {
     font-family: "Arial", sans-serif;
   }
 
-  /* Navbar background */
+  /* Navbar banner background - deep accessible purple */
   ul {
-    background-color: #e31838;
+    background-color: #3B2E63;
   }
 
   a {
     color: inherit;
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.2s ease;
   }
 
-  a:hover {
-    color: #e31838; /* Accent red on hover */
+  a:hover, a:focus {
+    color: #6D5ACF; /* Lighter purple accent */
+    outline: none;
   }
 
-  /* Headings */
+  /* Headings - slightly darker purple/gray */
   h1, h2, h3 {
-    color: #222;
+    color: #222222;
     font-weight: 600;
   }
 
   p {
-    color: #444;
+    color: #333333;
   }
 
   /* Horizontal rules */
@@ -65,37 +70,47 @@
     height: 1px;
   }
 
-  /* Buttons */
+  /* Buttons styling */
   button {
     background-color: #fff;
-    border: 2px solid #e31838;
+    border: 2px solid #3B2E63;
     border-radius: 5px;
     margin: 5px;
     cursor: pointer;
     padding: 6px 12px;
-    color: #e31838;
+    color: #3B2E63;
     font-weight: 600;
     transition: all 0.2s ease-in-out;
   }
 
   button:hover,
   button:focus {
-    background-color: #e31838;
+    background-color: #6D5ACF;
     color: white;
-    border-color: #e31838;
+    border-color: #6D5ACF;
+    outline: none;
   }
 
-  /* Footer */
+  /* Footer styling */
   .w3-container.w3-grey {
-    background: #333 !important;
+    background: #3B2E63 !important;
   }
 
   .w3-container.w3-grey h1 {
     color: #ccc;
     font-size: 0.9rem;
     font-weight: 400;
+    margin: 0;
+  }
+
+  /* Accessibility enhancements: focus outline */
+  a:focus,
+  button:focus {
+    outline: 3px solid #6D5ACF;
+    outline-offset: 2px;
   }
 </style>
+
 
 </head>
 <body>
