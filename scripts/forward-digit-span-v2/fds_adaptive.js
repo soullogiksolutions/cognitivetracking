@@ -1,6 +1,6 @@
 /*** Adaptive Forward Digit Span Task ***/
 
-// Globals and variables
+// Globals
 var useAudio = true;
 var fdsTotalTrials = 12;
 var fdsTrialNum = 1;
@@ -18,76 +18,74 @@ var exitLetters = false;
 var folder = "digits/";
 var digit_list = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// Fisher-Yates shuffle
+// Fisher–Yates shuffle function
 function shuffle(arr) {
-  var j, temp, i;
-  for (i=arr.length-1; i>0; i--) {
-    j = Math.floor(Math.random()*(i+1));
-    temp=arr[i];
-    arr[i]=arr[j];
-    arr[j]=temp;
+  for (let i = arr.length -1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
 }
 
-// Generate digit list for current span
+// Generate random digit list
 function getDigitList(len) {
-  var baseShuffled = [];
+  let baseShuffled = [];
   if (len <= digit_list.length) {
     baseShuffled = shuffle([...digit_list]);
   } else {
-    while (baseShuffled.length < len) {
+    while(baseShuffled.length < len) {
       baseShuffled = [...baseShuffled, ...shuffle([...digit_list])];
     }
   }
-  return baseShuffled.slice(0, len);
+  return baseShuffled.slice(0,len);
 }
 
-// Create stimuli for trial
+// Build stimuli for a trial
 function getStimuli(len) {
   stimList = [];
   currentDigitList = getDigitList(len);
-  for (let i=0;i<currentDigitList.length;i++) {
+  for (let d of currentDigitList) {
     if (useAudio) {
-      stimList.push(folder + currentDigitList[i] + ".wav");
+      stimList.push(folder + d + ".wav");
     } else {
-      stimList.push(`<p style="font-size:60px; font-weight:600; text-align:center;">${currentDigitList[i]}</p>`);
+      stimList.push(`<p style="font-size:60px; font-weight:600; text-align:center;">${d}</p>`);
     }
   }
   fds_correct_ans = [...currentDigitList];
   return stimList;
 }
 
-// Record button clicks
+// Record button press
 function recordClick(elm) {
   response.push(Number(elm.innerText));
   document.getElementById("echoed_txt").innerHTML = response.join(" ");
 }
 
-// Clear response input
+// Clear current response
 function clearResponse() {
   response = [];
   document.getElementById("echoed_txt").innerHTML = "";
 }
 
-// Preload digit audio files
-var aud_digits = digit_list.map(d => folder + d + ".wav");
-var preload_digits = {
+// Preload audio digits
+const aud_digits = digit_list.map(d => folder + d + ".wav");
+const preload_digits = {
   type: 'preload',
   audio: aud_digits,
 };
 
-// Welcome screen
+// Welcome screen with input and mode selection
 var fds_welcome = {
   type: 'html-button-response',
   stimulus: `
     <h2>Forward Digit Span Task</h2>
     <p>Select presentation mode:</p>
-    <button id="audioBtn" style="font-size:20px; margin-right: 10px;">Audio</button>
+    <button id="audioBtn" style="font-size:20px; margin-right:10px;">Audio</button>
     <button id="visualBtn" style="font-size:20px;">Visual</button>
-    <p>Choose number of trials (3-50):</p>
+    <p>Number of trials (3-50):</p>
     <input type="number" id="numTrials" value="12" min="3" max="50" style="width:60px; font-size:18px;">
-    <p>Press Continue when ready.</p>`,
+    <p>Press Continue when ready.</p>
+  `,
   choices: ['Continue'],
   on_load: function() {
     $('#audioBtn').css('background-color', '#4CAF50');
@@ -104,7 +102,6 @@ var fds_welcome = {
     });
   },
   on_start: function() {
-    // Save number of trials safely from DOM to trial data
     this.data.numTrials = $('#numTrials').val();
   },
   on_finish: function(data) {
@@ -112,9 +109,8 @@ var fds_welcome = {
     if (!isNaN(nt) && nt >= 3 && nt <= 50) {
       fdsTotalTrials = nt;
     } else {
-      fdsTotalTrials = 12; // default fallback
+      fdsTotalTrials = 12;
     }
-    // Reset for trial start
     currentSpan = startingSpan;
     fdsTrialNum = 1;
     wrongCount = 0;
@@ -124,7 +120,7 @@ var fds_welcome = {
   }
 };
 
-// Setup trial screen
+// Setup screen for current trial info
 var setup_fds = {
   type: 'html-button-response',
   stimulus: function() {
@@ -141,7 +137,7 @@ var setup_fds = {
   }
 };
 
-// Audio stimuli presentation trial
+// Audio stimulus trial
 var letter_fds = {
   type: 'audio-keyboard-response',
   stimulus: function() {
@@ -156,14 +152,14 @@ var letter_fds = {
   }
 };
 
-// Visual stimuli presentation trial
+// Visual stimulus trial
 var letter_fds_vis = {
   type: 'html-keyboard-response',
   stimulus: function() {
     return stimList[idx];
   },
-  choices: jsPsych.NO_KEYS,
   trial_duration: 700,
+  choices: jsPsych.NO_KEYS,
   post_trial_gap: 250,
   on_finish: function() {
     idx++;
@@ -171,7 +167,7 @@ var letter_fds_vis = {
   }
 };
 
-// Loop presentations for audio and visual
+// Loops for audio and visual letter presentations
 var letter_proc_audio = {
   timeline: [letter_fds],
   loop_function: function() {
@@ -185,11 +181,11 @@ var letter_proc_visual = {
   }
 };
 
-// Response buttons HTML
+// Response screen HTML
 var response_grid = `
   <div style="text-align:center;">
     <p>What were the numbers <b>in order</b>?</p>
-    ${Array.from({length: 9}, (_, i) => `<button class="num-button">${i+1}</button>`).join('')}
+    ${Array.from({length:9}, (_,i) => `<button class="num-button">${i+1}</button>`).join('')}
     <br>
     <button class="clear-button" id="clearBtn">Clear</button>
     <div><b>Current Answer:</b> <span id="echoed_txt"></span></div>
@@ -202,23 +198,19 @@ var fds_response_screen = {
   stimulus: response_grid,
   choices: ['Submit Answer'],
   on_load: function() {
-    $('.num-button').click(function() {
-      recordClick(this);
-    });
-    $('#clearBtn').click(function() {
-      clearResponse();
-    });
+    $('.num-button').click(function() { recordClick(this); });
+    $('#clearBtn').click(function() { clearResponse(); });
   },
   on_finish: function() {
-    var curans = response.slice();
-    var corans = fds_correct_ans;
-    var correct = (JSON.stringify(curans) === JSON.stringify(corans));
+    let curans = response.slice();
+    let corans = fds_correct_ans;
+    let correct = (JSON.stringify(curans) === JSON.stringify(corans));
     if (correct) {
       if (currentSpan > maxSpan) maxSpan = currentSpan;
       currentSpan++;
     } else {
       wrongCount++;
-      if (wrongCount < 3 && currentSpan > 1) currentSpan--;
+      if(wrongCount < 3 && currentSpan > 1) currentSpan--;
     }
     response = [];
     fdsTrialNum++;
@@ -233,7 +225,7 @@ var fds_response_screen = {
   }
 };
 
-// Wrap-up screen
+// Final wrapping screen
 var fds_wrapup = {
   type: 'html-button-response',
   stimulus: function() {
@@ -243,23 +235,21 @@ var fds_wrapup = {
   choices: ['Exit']
 };
 
-// Build timeline conditionally
+// Build timeline based on audio or visual mode
 var timeline = [];
 
 timeline.push(preload_digits);
 timeline.push(fds_welcome);
 timeline.push(setup_fds);
-
-if (useAudio) {
+if(useAudio) {
   timeline.push(letter_proc_audio);
 } else {
   timeline.push(letter_proc_visual);
 }
-
 timeline.push(fds_response_screen);
 timeline.push(fds_wrapup);
 
-// Initialize jsPsych
+// Initialize jsPsych experiment
 jsPsych.init({
   timeline: timeline
 });
