@@ -13,40 +13,90 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
-    body,h1,h2,h3,h4,h5,h6,p {font-family: "Arial", sans-serif;}
-    .w3-navbar,h1,button {font-family: "Arial", sans-serif;}
-    ul {background-color: #e31838;}
-    a:hover {color: black;}
-    hr.rounded {
-      border-top: 5px solid #bbb;
-      border-radius: 0;
-      width: 100%;
-      display: inline-block;
-      vertical-align: center;
-    }
-    button {
-      background-color: #fff;
-      border: 2px solid #e31838;
-      border-radius: 5px;
-      margin: 5px;
-      cursor: pointer;
-    }
-    button:hover,
-    button:focus {
-      background-color: #e31838;
-      color: white;
-      border: 2px solid #e31838;
-      transition: 0.1s;
-    }
-    hr {
-      border: 0;
-      clear: both;
-      display: block;
-      width: 96%;
-      background-color: #000;
-      height: 1px;
-    }
-  </style>
+  body, h1, h2, h3, h4, h5, h6, p {
+    font-family: "Arial", sans-serif;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .w3-navbar, h1, button {
+    font-family: "Arial", sans-serif;
+  }
+
+  /* Navbar background */
+  ul {
+    background-color: #e31838;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  a:hover {
+    color: #e31838; /* Accent red on hover */
+  }
+
+  /* Headings */
+  h1, h2, h3 {
+    color: #222;
+    font-weight: 600;
+  }
+
+  p {
+    color: #444;
+  }
+
+  /* Horizontal rules */
+  hr.rounded {
+    border-top: 3px solid #ddd;
+    border-radius: 0;
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #ddd;
+    height: 1px;
+  }
+
+  /* Buttons */
+  button {
+    background-color: #fff;
+    border: 2px solid #e31838;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    padding: 6px 12px;
+    color: #e31838;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+  }
+
+  button:hover,
+  button:focus {
+    background-color: #e31838;
+    color: white;
+    border-color: #e31838;
+  }
+
+  /* Footer */
+  .w3-container.w3-grey {
+    background: #333 !important;
+  }
+
+  .w3-container.w3-grey h1 {
+    color: #ccc;
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+</style>
+
 </head>
 <body>
 <!-- Navbar -->
