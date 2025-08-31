@@ -1,266 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Forward Digit Span Task</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="jspsych-6.3.0/jspsych.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-audio-keyboard-response.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-html-button-response.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-call-function.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-<link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" />
-<style>
-  .num-button {
-    font-size: 22px;
-    margin: 5px;
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-  }
-  .clear-button {
-    font-size: 18px;
-    margin: 10px;
-  }
-  #echoed_txt {
-    font-size: 28px;
-    color: blue;
-    min-height: 40px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Forward Digit Span Task</title>
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- jsPsych CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/jspsych@6.3.1/css/jspsych.css" rel="stylesheet" />
+  <style>
+    .num-button {
+      font-size: 22px;
+      margin: 5px;
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+    }
+    .clear-button {
+      font-size: 18px;
+      margin: 10px;
+    }
+    #echoed_txt {
+      font-size: 28px;
+      color: blue;
+      min-height: 40px;
+    }
+  </style>
 </head>
 <body></body>
+<!-- jsPsych core + plugins -->
+<script src="https://cdn.jsdelivr.net/npm/jspsych@6.3.1/jspsych.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspsych@6.3.1/plugins/jspsych-audio-keyboard-response.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspsych@6.3.1/plugins/jspsych-call-function.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspsych@6.3.1/plugins/jspsych-preload.js"></script>
 
-<script>
-var useAudio = true;
-var currentDigitList;
-var maxSpan = 0;
-var folder = "digits/";
-var fdsTrialNum = 1;
-var fdsTotalTrials = 12;
-var response = [];
-var fds_correct_ans;
-var digit_list = [1,2,3,4,5,6,7,8,9];
-var startingSpan = 3;
-var currentSpan;
-var stimList;
-var idx = 0;
-var exitLetters = false;
-var wrongCount = 0;
-var spanHistory = [];
-
-function shuffle(a) {
-  var j, x, i;
-  for (i = a.length -1; i>0; i--){
-    j = Math.floor(Math.random()*(i+1));
-    x = a[i];
-    a[i] = a[j];
-    a[j] = x;
-  }
-  return a;
-}
-
-function getDigitList(len){
-  var shuff_final = [];
-  if(len <= digit_list.length){
-    shuff_final = shuffle([...digit_list]);
-  } else {
-    while(shuff_final.length < len){
-      shuff_final = [...shuff_final, ...shuffle([...digit_list])];
-    }
-  }
-  return shuff_final.slice(0,len);
-}
-
-function getStimuli(numDigits){
-  var stimArr = [];
-  var digits = getDigitList(numDigits);
-  fds_correct_ans = digits;
-  for(let d of digits){
-    if(useAudio){
-      stimArr.push(folder + d + ".wav");
-    } else {
-      stimArr.push('<p style="font-size:60px;font-weight:600;text-align:center;">'+d+'</p>');
-    }
-  }
-  return stimArr;
-}
-
-var recordClick = function(elm){
-  response.push(Number($(elm).text()));
-  document.getElementById("echoed_txt").innerHTML = response.join(" ");
-}
-
-var clearResponse = function(){
-  response = [];
-  document.getElementById("echoed_txt").innerHTML = "";
-}
-
-// Welcome screen for choice
-var welcome = {
-  type: 'html-button-response',
-  stimulus: `
-    <h2>Forward Digit Span Task</h2>
-    <p>Select presentation mode:</p>
-    <button id="audioBtn" style="margin-right: 10px; font-size:20px;">Audio</button>
-    <button id="visualBtn" style="font-size:20px;">Visual</button>
-    <p>Number of trials:</p>
-    <input type="number" id="numTrials" value="12" min="3" max="50" style="font-size:18px; width:60px;">
-    <p>Press Continue when ready.</p>
-  `,
-  choices: ['Continue'],
-  on_load: function(){
-    $('#audioBtn').css('background-color', '#4CAF50');
-    $('#visualBtn').css('background-color', '');
-    $('#audioBtn').click(function(){
-      useAudio = true;
-      $('#audioBtn').css('background-color', '#4CAF50');
-      $('#visualBtn').css('background-color', '');
-    });
-    $('#visualBtn').click(function(){
-      useAudio = false;
-      $('#visualBtn').css('background-color', '#4CAF50');
-      $('#audioBtn').css('background-color', '');
-    });
-  },
-  on_finish: function(){
-    let nt = parseInt(document.getElementById('numTrials').value);
-    if(!isNaN(nt) && nt >=3 && nt <= 50){
-      fdsTotalTrials = nt;
-    }
-    currentSpan = startingSpan;
-    fdsTrialNum = 1;
-    wrongCount = 0;
-    maxSpan = 0;
-    spanHistory = [];
-  }
-};
-
-var setup_fds = {
-  type: 'html-button-response',
-  stimulus: function(){
-    return `<p>Trial ${fdsTrialNum} of ${fdsTotalTrials}</p>
-            <p>Current Span: <b>${currentSpan}</b> | Max Span: <b>${maxSpan}</b> | Wrong Attempts: <b>${wrongCount}/3</b></p>`;
-  },
-  choices: ['Begin'],
-  post_trial_gap: 500,
-  on_finish: function(){
-    stimList = getStimuli(currentSpan);
-    spanHistory[fdsTrialNum-1] = currentSpan;
-    idx = 0;
-    exitLetters = false;
-  }
-};
-
-// Audio stimulus presentation
-var letter_fds = {
-  type: 'audio-keyboard-response',
-  stimulus: function(){
-    return stimList[idx];
-  },
-  choices: jsPsych.NO_KEYS,
-  trial_ends_after_audio: true,
-  post_trial_gap: 250,
-  on_finish: function(){
-    idx++;
-    if(idx >= stimList.length){
-      exitLetters = true;
-    }
-  }
-};
-
-// Visual stimulus presentation
-var letter_fds_vis = {
-  type: 'html-keyboard-response',
-  stimulus: function(){
-    return stimList[idx];
-  },
-  choices: jsPsych.NO_KEYS,
-  trial_duration: 700,
-  post_trial_gap: 250,
-  on_finish: function(){
-    idx++;
-    if(idx >= stimList.length){
-      exitLetters = true;
-    }
-  }
-};
-
-var letter_proc = {
-  timeline: [],
-  on_timeline_start: function(){
-    if(useAudio){
-      letter_proc.timeline = [letter_fds];
-    } else {
-      letter_proc.timeline = [letter_fds_vis];
-    }
-  },
-  loop_function: function(){
-    return !exitLetters;
-  }
-};
-
-var response_grid =
-  '<div style="text-align:center;">' +
-  '<p>What were the numbers <b>in order</b>?</p>' +
-  Array.from({length:9}, (_,i) =>
-    `<button class="num-button">${i+1}</button>`).join('') +
-  '<br>' +
-  '<button class="clear-button" id="clearBtn">Clear</button>' +
-  '<div><b>Current Answer:</b> <span id="echoed_txt"></span></div>' +
-  '</div>';
-
-var fds_response_screen = {
-  type: 'html-button-response',
-  stimulus: response_grid,
-  choices: ['Submit Answer'],
-  on_load: function(){
-    $('.num-button').click(function(){
-      recordClick(this);
-    });
-    $('#clearBtn').click(function(){
-      clearResponse();
-    });
-  },
-  on_finish: function(){
-    var curans = response;
-    var corans = fds_correct_ans;
-    var correct = (JSON.stringify(curans) === JSON.stringify(corans));
-    if(correct){
-      if(currentSpan > maxSpan) maxSpan = currentSpan;
-      currentSpan++;
-    } else {
-      wrongCount++;
-      if(wrongCount < 3 && currentSpan > 1) currentSpan--;
-    }
-    response = [];
-    fdsTrialNum++;
-  }
-};
-
-var fds_wrapup = {
-  type: 'html-button-response',
-  stimulus: function(){
-    return `<p>Thank you for participating. Your final digit span score was <b>${maxSpan}</b>.</p>`;
-  },
-  choices: ['Exit']
-};
-
-var fds_adaptive = {
-  timeline: [welcome, setup_fds, letter_proc, fds_response_screen],
-  loop_function: function(){
-    return (fdsTrialNum <= fdsTotalTrials && wrongCount < 3);
-  }
-};
-
-
-var timeline = [];
-timeline.push(fds_adaptive);
-timeline.push(fds_wrapup);
-
-jsPsych.init({
-  timeline: timeline
-});
-</script>
+<!-- Load your experiment script -->
+<script src="fds_adaptive.js"></script>
 </html>
