@@ -16,6 +16,9 @@ var exitLetters = false;
 var folder = "digits/";
 var digit_list = [1,2,3,4,5,6,7,8,9];
 
+// Create global AudioContext variable
+var audioContext;
+
 // Helpers
 function shuffle(arr) {
   for (let i = arr.length-1; i > 0; i--) {
@@ -68,7 +71,7 @@ var preload_digits = {
   audio: aud_digits,
 };
 
-// Welcome
+// Welcome screen with audio context resume on Continue
 var fds_welcome = {
   type: 'html-button-response',
   stimulus: `
@@ -94,11 +97,20 @@ var fds_welcome = {
       $('#audioBtn').css('background-color', '');
     });
   },
-  on_start: function() {
-    this.data.numTrials = $('#numTrials').val();
-  },
   on_finish: function(data) {
-    let nt = parseInt(data.numTrials);
+    // Resume or create AudioContext after user gesture
+    if (useAudio) {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+          console.log('AudioContext resumed');
+        });
+      }
+    }
+    // Set number of trials and reset variables
+    let nt = parseInt($('#numTrials').val());
     if(!isNaN(nt) && nt >=3 && nt <= 50) {
       fdsTotalTrials = nt;
     } else {
@@ -110,7 +122,7 @@ var fds_welcome = {
     maxSpan = 0;
     spanHistory = [];
     jsPsych.data.addProperties({BDS_modality: useAudio ? 'auditory' : 'visual'});
-  }
+  },
 };
 
 // Setup trial
@@ -156,7 +168,7 @@ var letter_fds_vis = {
   }
 };
 
-// Letter procedures
+// Letter procedure timelines
 var letter_proc_audio = {
   timeline: [letter_fds],
   loop_function: function() { return !exitLetters; }
@@ -171,7 +183,7 @@ var response_grid = `
 <div style="text-align:center;">
   <p>What were the numbers <b>in order</b>?</p>
   ${Array.from({length:9}, (_,i) => `<button class="num-button">${i+1}</button>`).join('')}
-  <br>
+  <br><br>
   <button class="clear-button" id="clearBtn">Clear</button>
   <div><b>Current Answer:</b> <span id="echoed_txt"></span></div>
 </div>
@@ -193,9 +205,10 @@ var fds_response_screen = {
     if(correct) {
       if(currentSpan > maxSpan) maxSpan = currentSpan;
       currentSpan++;
+      wrongCount = 0; // reset wrong count on correct
     } else {
       wrongCount++;
-      if(wrongCount < 3 && currentSpan > 1) currentSpan--;
+      if(wrongCount >= 3 && currentSpan > 1) currentSpan--;
     }
     response = [];
     fdsTrialNum++;
