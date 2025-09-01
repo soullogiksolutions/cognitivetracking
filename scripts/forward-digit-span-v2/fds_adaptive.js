@@ -1,15 +1,15 @@
 
 
 /**************************/
-/** FORWARD DIGIT SPAN **/
+/** BACKWARD DIGIT SPAN **/
 /**************************/
 /*
-This module consists of an adaptive forward digit span (BDS)
-task, commonly used as a measure of short-term memory.
+This module consists of an adaptive backward digit span (BDS)
+task, commonly used as a measure of working memory.
 
 On each trial, participant hear or see a string of digits.
 Then, participants have to click on buttons to report these
-digits in sequential order.
+digits in reverse order.
 
 The script is easily customizable (e.g., audio or visual
 digit presentation, starting span, number of trials, etc.)
@@ -19,15 +19,15 @@ whereas two incorrect answers in a row will decrease the
 span by one.
 
 The script outputs two important variables. The first is
-'fds_adaptive' which should be added to the experiment timeline
-in the main html file -- e.g., timeline.push(fds_adaptive);
+'bds_adaptive' which should be added to the experiment timeline
+in the main html file -- e.g., timeline.push(bds_adaptive);
 
-The second is 'return_fds_adaptive_folder' which should be pushed or
+The second is 'return_bds_adaptive_folder' which should be pushed or
 concatenated with other audio files for preloading purposes.
 This is a function, so users can specify a different folder
 name in the main html file
 
--- e.g., var foldername = return_fds_adaptive_folder();
+-- e.g., var foldername = return_bds_adaptive_folder();
 
 The folder is not applicable if you are planning
 on running a visual version of the task as no additional
@@ -45,14 +45,15 @@ Stephen Van Hedger, April 2020
 var useAudio = true; // change to false if you want this to be a visual task!
 
 var currentDigitList; //current digit list
+var reversedDigitString; //reversed digit string
 var totalCorrect = 0; //counter for total correct
 var totalTrials = 0; //counter for total trials
 var maxSpan; //value that will reflect a participant's maximum span (e.g., 6)
 var folder = "digits/"; //folder name for storing the audio files
-var fdsTrialNum = 1; //counter for trials
-var fdsTotalTrials = 12; //total number of desired trials
+var bdsTrialNum = 1; //counter for trials
+var bdsTotalTrials = 12; //total number of desired trials
 var response = []; //for storing partcipants' responses
-var fds_correct_ans; //for storing the correct answer on a given trial
+var bds_correct_ans; //for storing the correct answer on a given trial
 var staircaseChecker = []; //for assessing whether the span should move up/down/stay
 var staircaseIndex = 0; //index for the current staircase
 var digit_list = [1,2,3,4,5,6,7,8,9]; //digits to be used (unlikely you will want to change this)
@@ -66,6 +67,7 @@ var exitLetters; //for exiting the letter loop
 
 const arrSum = arr => arr.reduce((a,b) => a + b, 0) //simple variable for calculating sum of an array
 var aud_digits = ['digits/one.wav', 'digits/two.wav', 'digits/three.wav', 'digits/four.wav', 'digits/five.wav', 'digits/six.wav', 'digits/seven.wav', 'digits/eight.wav', 'digits/nine.wav']; //the digits
+
 
 //add to the dataframe whether the BDS was auditory or visual
 jsPsych.data.addProperties({
@@ -137,16 +139,19 @@ function getStimuli(numDigits) {
 	var digit;
 	var stimList = [];
 	currentDigitList = getDigitList(numDigits);
+	reversedDigitString = "";
 	for (var i = 0; i < currentDigitList.length; i += 1) {
 		if (useAudio) {
 			digit = currentDigitList[i];
 			stimList.push(digitToFile(digit));
+			reversedDigitString = digit.toString() + reversedDigitString;
 		} else {
 			digit = currentDigitList[i].toString();
 			stimList.push('<p style="font-size:60px;font-weight:600;">' + digit + '</p>');
+			reversedDigitString = digit + reversedDigitString;
 		}
 	}
-	fds_correct_ans = currentDigitList; //this is the reversed array for assessing performance
+	bds_correct_ans = currentDigitList.slice().reverse(); //this is the reversed array for assessing performance
 	return stimList;
 }
 
@@ -180,7 +185,7 @@ function updateSpan() {
 //From the Experiment Factory Repository
 var response_grid =
 '<div class = numbox>' +
-'<p>What were the numbers <b>in order</b>?<br>(When you are ready to lock in your answer, press ENTER)</p>' +
+'<p>What were the numbers <b>in reverse order</b>?<br>(When you are ready to lock in your answer, press ENTER)</p>' +
 '<button id = button_1 class = "square num-button" onclick = "recordClick(this)"><div class = content><div class = numbers>1</div></div></button>' +
 '<button id = button_2 class = "square num-button" onclick = "recordClick(this)"><div class = content><div class = numbers>2</div></div></button>' +
 '<button id = button_3 class = "square num-button" onclick = "recordClick(this)"><div class = content><div class = numbers>3</div></div></button>' +
@@ -199,48 +204,47 @@ var preload_digits = {
 	audio: aud_digits
 };
 
-
 //Dynamic instructions based on whether it is an auditory or visual task
 var instructions;
 if (useAudio) {
-	instructions = '<p>On each trial, you will hear a sequence of digits and be asked to type them back in the same order in which they were heard.</p>'+
+	instructions = '<p>On each trial, you will hear a sequence of digits and be asked to type them back in reverse order.</p>'+
 				   '<p>For example, if you heard the digits <b style="color:blue;">one</b>, <b style="color:blue;">two</b>, '+
-				   '<b style="color:blue;">three</b>, you would respond with <b style="color:blue;">1</b>, <b style="color:blue;">2</b>, <b style="color:blue;">3</b></p>';
+				   '<b style="color:blue;">three</b>, you would respond with <b style="color:blue;">3</b>, <b style="color:blue;">2</b>, <b style="color:blue;">1</b></p>';
 } else {
-	instructions = '<p>On each trial, you will see a sequence of digits and be asked to type them back in the same order in which they were seen.</p>'+
+	instructions = '<p>On each trial, you will see a sequence of digits and be asked to type them back in reverse order.</p>'+
 				   '<p>For example, if you saw the digits <b style="color:blue;">1</b>, <b style="color:blue;">2</b>, '+
-				   '<b style="color:blue;">3</b>, you would respond with <b style="color:blue;">1</b>, <b style="color:blue;">2</b>, <b style="color:blue;">3</b></p>';
+				   '<b style="color:blue;">3</b>, you would respond with <b style="color:blue;">3</b>, <b style="color:blue;">2</b>, <b style="color:blue;">1</b></p>';
 }
 
-var fds_welcome = {
+var bds_welcome = {
 type: "html-button-response",
 stimulus: '<p>Welcome to the <b>digit span task.</b></p>' +instructions +
 	'<p>To ensure high quality data, it is very important that you do not use any memory aid (e.g., pen and paper).<br>Please do the task solely in your head.</p>' +
-	'<p>There will be '+fdsTotalTrials+' total trials. Participation takes around 10 minutes.</p>',
+	'<p>There will be '+bdsTotalTrials+' total trials. Participation takes around 10 minutes.</p>',
 choices: ['Continue']
 };
 
 
 //set-up screen
-var setup_fds = {
+var setup_bds = {
 type: 'html-button-response',
-stimulus: function(){return '<p>Trial '+fdsTrialNum+' of '+fdsTotalTrials+'</p>';},
+stimulus: function(){return '<p>Trial '+bdsTrialNum+' of '+bdsTotalTrials+'</p>';},
 choices: ['Begin'],
 	post_trial_gap: 500,
 	on_finish: function(){
-		if(fdsTrialNum == 1) {
+		if(bdsTrialNum == 1) {
 			currentSpan = startingSpan;
 		}
 		stimList = getStimuli(currentSpan); //get the current stimuli for the trial
-		spanHistory[fdsTrialNum-1]=currentSpan; //log the current span in an array
-		fdsTrialNum += 1; //add 1 to the total trial count
+		spanHistory[bdsTrialNum-1]=currentSpan; //log the current span in an array
+		bdsTrialNum += 1; //add 1 to the total trial count
 		idx = 0; //reset the index prior to the letter presentation
 		exitLetters = 0; //reset the exit letter variable
 	}
 };
 
 //letter presentation
-var letter_fds = {
+var letter_bds = {
 	type: 'audio-keyboard-response',
 	stimulus: function(){return stimList[idx];},
 	choices: jsPsych.NO_KEYS,
@@ -258,7 +262,7 @@ var letter_fds = {
 };
 
 //visual letter presentation
-var letter_fds_vis = {
+var letter_bds_vis = {
 	type: 'html-keyboard-response',
 	stimulus: function(){return stimList[idx];},
 	choices: jsPsych.NO_KEYS,
@@ -278,7 +282,7 @@ var letter_fds_vis = {
 //conditional loop of letters for the length of stimList...different procedures for visual and audio
 if(useAudio){
 	var letter_proc = {
-		timeline: [letter_fds],
+		timeline: [letter_bds],
 		loop_function: function(){
 			if(exitLetters == 0){
 				return true;
@@ -289,7 +293,7 @@ if(useAudio){
 	}
 } else {
 	var letter_proc = {
-		timeline: [letter_fds_vis],
+		timeline: [letter_bds_vis],
 		loop_function: function(){
 			if(exitLetters == 0){
 				return true;
@@ -301,13 +305,13 @@ if(useAudio){
 };
 
 //response screen
-var fds_response_screen = {
+var bds_response_screen = {
 type: 'html-keyboard-response',
 stimulus: response_grid,
 choices: ['Enter'],
 	on_finish: function(data){
 		var curans = response;
-		var corans = fds_correct_ans;
+		var corans = bds_correct_ans;
 		if(JSON.stringify(curans) === JSON.stringify(corans)) {
 			var gotItRight = 1;
 			console.log("correct");
@@ -322,7 +326,7 @@ choices: ['Enter'],
 		console.log(staircaseChecker);
 
 		jsPsych.data.addDataToLastTrial({
-			designation: 'FDS-RESPONSE',
+			designation: 'BDS-RESPONSE',
 			span: currentSpan,
 			answer: curans,
 			correct: corans,
@@ -345,15 +349,15 @@ func: updateSpan
 
 //the core procedure
 var staircase = {
-timeline: [setup_fds, letter_proc, fds_response_screen, staircase_assess]
+timeline: [setup_bds, letter_proc, bds_response_screen, staircase_assess]
 }
 
 //main procedure
-var fds_mainproc = {
+var bds_mainproc = {
 	timeline: [staircase],
 	loop_function: function(){
 		//if we haev reached the specified total trial amount, exit
-		if(fdsTrialNum > fdsTotalTrials) {
+		if(bdsTrialNum > bdsTotalTrials) {
 			return false;
 		} else {
 			return true;
@@ -365,7 +369,7 @@ var fds_mainproc = {
 /** Wrap-Up **/
 /*************/
 
-var fds_wrapup = {
+var bds_wrapup = {
 type: 'html-button-response',
 stimulus: '<p>Thank you for your participation. This concludes the digit span.</p>',
 choices: ['Exit']
@@ -377,9 +381,9 @@ choices: ['Exit']
 /*
 Simply push this to your timeline
 variable in your main html files -
-e.g., timeline.push(fds_adaptive)
+e.g., timeline.push(bds_adaptive)
 */
 
-var fds_adaptive = {
-	timeline: [preload_digits, fds_welcome, fds_mainproc, fds_wrapup]
+var bds_adaptive = {
+	timeline: [preload_digits, bds_welcome, bds_mainproc, bds_wrapup]
 };
