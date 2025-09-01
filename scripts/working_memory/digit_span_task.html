@@ -143,12 +143,38 @@
   }
 
   var conclusion = {
-    type: 'html-keyboard-response',
-    stimulus: function(){
-      return '<div style="font-size:20px;">You have completed the task.<br>Thank you for your participation in this task.<br><br>Maximum number of digits recalled correctly was ' + highest_span_score + '.<br><br>Maximum number of digits reached before making two consecutive errors was ' + consec_error_score + '.<br><br>Please tell the Research Assistant you have completed the task.</div>'
-    },
-    choices: jsPsych.NO_KEYS
-  }
+  type: 'html-keyboard-response',
+  stimulus: function(){
+    return `
+      <div style="font-size:20px;">
+        You have completed the task.<br>
+        Thank you for your participation in this task.<br><br>
+        Maximum number of digits recalled correctly was ${highest_span_score}.<br><br>
+        Maximum number of digits reached before making two consecutive errors was ${consec_error_score}.<br><br>
+        Please tell the Research Assistant you have completed the task.<br><br>
+        <button id="exportBtn">Export Results (CSV)</button>
+      </div>
+      <script>
+        document.getElementById('exportBtn').onclick = function() {
+          const data = jsPsych.data.get().csv();
+          const filename = "WM_digit_span_${partN}_${IDsub}.csv";
+          const blob = new Blob([data], {type: 'text/csv'});
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        };
+      <\/script>
+    `;
+  },
+  choices: jsPsych.ALL_KEYS,
+  trial_duration: null,
+}
+
 
   var test_stack = {
     timeline: [test_stimuli],
