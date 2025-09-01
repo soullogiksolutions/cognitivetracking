@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Adaptive Marketing Test</title>
+
+  <!-- Load jsPsych core and plugins from CDN -->
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+  <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+    #results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    #results-table th, #results-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    #results-table th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+    // Add a function to send data to your server
+function sendDataToServer(data) {
+  fetch('https://your-server.com/api/survey', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
+// Initialize jsPsych
+var jsPsych = initJsPsych({
+  on_finish: function() {
+    var all_data = jsPsych.data.get().trials;
+
+    // Filter for trials that have question data and reaction times
+    var survey_results = all_data.filter(function(trial) {
+      return trial.hasOwnProperty('response') && trial.hasOwnProperty('rt');
+    });
+
+    var results_html = '<h2>Survey Results</h2>';
+    results_html += '<table id="results-table">';
+    results_html += '<thead><tr><th>Question Type</th><th>Question Name</th><th>Reaction Time (ms)</th><th>Response</th></tr></thead>';
+    results_html += '<tbody>';
+    
+    survey_results.forEach(function(trial) {
+      // Safely get the plugin type and provide a fallback if it's undefined
+      var plugin_type_raw = trial.plugin_type;
+      var plugin_type = plugin_type_raw ? plugin_type_raw.replace('jsPsych', '').replace('Survey', '') : 'n/a';
+      
+      var reaction_time = trial.rt; // jsPsych records one rt per trial
+
+      // Correctly loop through each question within a trial
+      if (trial.response) { // Add check for valid response data
+        for (var name in trial.response) {
+          if (trial.response.hasOwnProperty(name)) {
+              var response_value = trial.response[name];
+              
+              results_html += '<tr>';
+              results_html += '<td>' + plugin_type + '</td>';
+              results_html += '<td>' + name + '</td>';
+              results_html += '<td>' + reaction_time + '</td>';
+              results_html += '<td>' + response_value + '</td>';
+              results_html += '</tr>';
+          }
+        }
+      }
+    });
+
+    results_html += '</tbody></table>';
+
+     // Send the collected data to your server for processing
+    // sendDataToServer(data_for_server);
+
+    jsPsych.endExperiment(results_html);
+  }
+});
+
+// --- Timeline definition ---
+
+// A simple welcome message to start the experiment
+var welcome_block = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: 'Welcome to the survey! Press any key to begin.',
+  choices: "ALL_KEYS"
+};
+
+// Text survey trial
+var text_survey_trial = {
+  type: jsPsychSurveyText,
+  questions: [
+    { prompt: 'What is your name?', name: 'Name', required: true },
+    { prompt: 'Tell us about your experience:', name: 'Experience', rows: 5, columns: 50 }
+  ]
+};
+
+// Multiple-choice survey trial
+var multi_choice_survey_trial = {
+  type: jsPsychSurveyMultiChoice,
+  questions: [
+    {
+      prompt: 'Which of the following colors do you like most?',
+      name: 'FavoriteColor',
+      options: ['Red', 'Blue', 'Green', 'Yellow'],
+      required: true
+    },
+    {
+      prompt: 'How often do you use social media?',
+      name: 'SocialMediaFrequency',
+      options: ['Daily', 'Weekly', 'Monthly', 'Rarely'],
+      required: true
+    }
+  ]
+};
+
+// Define the experiment timeline
+var timeline = [
+  welcome_block,
+  text_survey_trial,
+  multi_choice_survey_trial
+];
+
+// Run the jsPsych timeline
+jsPsych.run(timeline);
+</script>
+</html>
