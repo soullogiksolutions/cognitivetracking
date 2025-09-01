@@ -1,4 +1,3 @@
-// Configuration
 var folder = "digits/";
 var fileMap = {
   1: "one.wav", 2: "two.wav", 3: "three.wav", 4: "four.wav",
@@ -40,8 +39,8 @@ function createAudioTrials(digitSeq) {
     post_trial_gap: 250
   }));
 }
-function recordClick(elm) {
-  response.push(Number(elm.innerText.trim()));
+function recordClick(digit) {
+  response.push(digit);
   document.getElementById("echoed_txt").innerHTML = response.join(" ");
 }
 function clearResponse() {
@@ -52,23 +51,17 @@ function clearResponse() {
 // Preload audio files
 var preload = {
   type: 'preload',
-  audio: Object.values(fileMap).map(f => folder + f)
+  audio: Object.values(fileMap)
 };
 
 // Welcome screen
 var welcome = {
   type: 'html-button-response',
-  stimulus: `
-    <h2>Forward Digit Span Task</h2>
-    <p>Audio only</p>
-    <p>Press Continue to start.</p>`,
+  stimulus: `<h2>Forward Digit Span Task</h2><p>Audio only<br>Press Continue to start.</p>`,
   choices: ['Continue'],
   on_finish: () => {
-    if(!audioContext){
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if(audioContext.state === 'suspended'){
-      audioContext.resume();
+    if(!audioContext || audioContext.state === 'suspended'){
+      audioContext = new AudioContext();
     }
   }
 };
@@ -78,7 +71,8 @@ var setupTrial = {
   type: 'html-button-response',
   stimulus: () => `
     <p>Trial ${spanTrialCount + 1} of 2 at span length: ${currentSpan}</p>
-    <p>Max span so far: ${maxSpanPassed}</p>`,
+    <p>Max span so far: ${maxSpanPassed}</p>
+  `,
   choices: ['Begin'],
   on_finish: () => {
     fds_correct_ans = getDigitList(currentSpan);
@@ -90,9 +84,8 @@ var setupTrial = {
 var responseGridHTML = `
 <div style="text-align:center;">
   <p>What were the numbers <b>in order</b>?</p>
-  ${Array.from({length:9}, (_,i) => `<button class="num-button">${i+1}</button>`).join('')}
-  <br><br><br>
-  <button id="clearBtn">Clear</button>
+  <div id="num-buttons"></div>
+  <br><br><button id="clearBtn">Clear</button>
   <div><b>Current Answer:</b> <span id="echoed_txt"></span></div>
 </div>`;
 
@@ -103,15 +96,18 @@ var responseTrial = {
   choices: ['Submit Answer'],
   on_load: () => {
     // Attach button handlers
-    document.querySelectorAll('.num-button').forEach(btn => {
-      btn.onclick = () => recordClick(btn);
-    });
+    for(let i=0; i<currentSpan; i++){
+      const button = document.createElement('button');
+      button.classList.add('num-button');
+      button.innerHTML = i+1;
+      button.onclick = () => recordClick(i);
+      document.getElementById("num-buttons").appendChild(button);
+    }
     document.getElementById('clearBtn').onclick = clearResponse;
   },
   on_finish: () => {
     trialNum++;
-    const correct = response.length === fds_correct_ans.length 
-                    && response.every((v,i) => v === fds_correct_ans[i]);
+    const correct = response.length === currentSpan && response.every((v,i) => v === fds_correct_ans[i]);
     spanTrialCount++;
     if(correct){
       spanCorrectCount++;
@@ -156,5 +152,9 @@ var timeline = [preload, welcome, trialLoop];
 
 // Initialize jsPsych
 jsPsych.init({
-  timeline: timeline
+  timeline: timeline,
+  on_data_collected: function(data) {
+    // Optionally, log the collected data to the console
+    console.log(data);
+  }
 });
