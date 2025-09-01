@@ -24,7 +24,6 @@ function shuffle(arr) {
   }
   return arr;
 }
-
 function getDigitList(len) {
   let res = [];
   while(res.length < len){
@@ -32,7 +31,6 @@ function getDigitList(len) {
   }
   return res.slice(0, len);
 }
-
 function createAudioTrials(digitSeq) {
   return digitSeq.map(digit => ({
     type: 'audio-keyboard-response',
@@ -42,7 +40,6 @@ function createAudioTrials(digitSeq) {
     post_trial_gap: 250
   }));
 }
-
 function recordClick(elm) {
   response.push(Number(elm.innerText.trim()));
   document.getElementById("echoed_txt").innerHTML = response.join(" ");
@@ -52,7 +49,7 @@ function clearResponse() {
   document.getElementById("echoed_txt").innerHTML = "";
 }
 
-// Preload
+// Preload audio files
 var preload = {
   type: 'preload',
   audio: Object.values(fileMap).map(f => folder + f)
@@ -76,7 +73,7 @@ var welcome = {
   }
 };
 
-// Setup trial (span length and trial count info)
+// Setup trial info screen
 var setupTrial = {
   type: 'html-button-response',
   stimulus: () => `
@@ -84,34 +81,32 @@ var setupTrial = {
     <p>Max span so far: ${maxSpanPassed}</p>`,
   choices: ['Begin'],
   on_finish: () => {
-    // Generate stimuli & correct answers
     fds_correct_ans = getDigitList(currentSpan);
     response = [];
   }
 };
 
-// Digit audio trials timeline generated dynamically
-var audioTrials = {
-  timeline: [],
-};
-
-// Response screen with number buttons
+// Response screen HTML
 var responseGridHTML = `
 <div style="text-align:center;">
   <p>What were the numbers <b>in order</b>?</p>
   ${Array.from({length:9}, (_,i) => `<button class="num-button">${i+1}</button>`).join('')}
-  <br><br>
+  <br><br><br>
   <button id="clearBtn">Clear</button>
   <div><b>Current Answer:</b> <span id="echoed_txt"></span></div>
 </div>`;
 
+// Response screen trial
 var responseTrial = {
   type: 'html-button-response',
   stimulus: responseGridHTML,
   choices: ['Submit Answer'],
   on_load: () => {
-    $('.num-button').off('click').on('click', function() { recordClick(this); });
-    $('#clearBtn').off('click').on('click', clearResponse);
+    // Attach button handlers
+    document.querySelectorAll('.num-button').forEach(btn => {
+      btn.onclick = () => recordClick(btn);
+    });
+    document.getElementById('clearBtn').onclick = clearResponse;
   },
   on_finish: () => {
     trialNum++;
@@ -138,13 +133,21 @@ var responseTrial = {
   }
 };
 
-// Main trial loop with dynamic timeline generation for audio trials
+// Main trial loop with dynamic audio timeline generation
 var trialLoop = {
-  timeline: [setupTrial, audioTrials, responseTrial],
+  timeline: [
+    setupTrial,
+    {
+      timeline: function() {
+        return createAudioTrials(fds_correct_ans);
+      }
+    },
+    responseTrial
+  ],
   loop_function: () => currentSpan <= maxSpan,
   on_timeline_start: () => {
-    // Generate new audio trials timeline each new trial
-    audioTrials.timeline = createAudioTrials(fds_correct_ans);
+    fds_correct_ans = getDigitList(currentSpan);
+    response = [];
   }
 };
 
@@ -153,5 +156,5 @@ var timeline = [preload, welcome, trialLoop];
 
 // Initialize jsPsych
 jsPsych.init({
-  timeline: timeline,
+  timeline: timeline
 });
