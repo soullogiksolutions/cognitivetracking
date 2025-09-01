@@ -1,18 +1,16 @@
 // Globals
 var useAudio = true;
-var fdsTotalTrials = 12;
-var fdsTrialNum = 1;
 var startingSpan = 3;
-var currentSpan = startingSpan;   // will be updated after each correct answer
-var maxSpan = startingSpan;
-var totalWrongCount = 0;
+var currentSpan = startingSpan;
+var maxSpanPassed = 0;
+var spanTrialCount = 0;
+var spanCorrectCount = 0;
+var fdsTotalTrials = 50; // max span length or trial limit
 var response = [];
-var fds_correct_ans = [];
 var stimList = [];
-var idx = 0;
-var exitDigits = false;
+var fds_correct_ans = [];
 var folder = "digits/";
-var spanHistory = [];
+
 var fileMap = {
   1: "one.wav", 2: "two.wav", 3: "three.wav", 4: "four.wav",
   5: "five.wav", 6: "six.wav", 7: "seven.wav", 8: "eight.wav", 9: "nine.wav"
@@ -21,10 +19,14 @@ var fileMap = {
 function digitToFile(digit) {
   return folder + fileMap[digit];
 }
+
 var digit_list = [1,2,3,4,5,6,7,8,9];
 
+// AudioContext for playback
+var audioContext;
+
 function shuffle(arr) {
-  for(let i=arr.length-1;i>0;i--) {
+  for(let i=arr.length-1; i>0; i--) {
     let j = Math.floor(Math.random()*(i+1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
@@ -32,17 +34,17 @@ function shuffle(arr) {
 }
 
 function getDigitList(len) {
-  let result = [];
-  while(result.length < len) {
-    result.push(...shuffle([...digit_list]));
+  let shuffled = [];
+  while(shuffled.length < len) {
+    shuffled = [...shuffled, ...shuffle([...digit_list])];
   }
-  return result.slice(0, len);
+  return shuffled.slice(0,len);
 }
 
 function getStimuli(len) {
   let digits = getDigitList(len);
   stimList = digits.map(d => digitToFile(d));
-  fds_correct_ans = digits; // save correct answer as an array of numbers
+  fds_correct_ans = digits; // save correct sequence
   return stimList;
 }
 
@@ -50,6 +52,7 @@ function recordClick(elm) {
   response.push(Number(elm.innerText.trim()));
   document.getElementById("echoed_txt").innerHTML = response.join(" ");
 }
+
 function clearResponse() {
   response = [];
   document.getElementById("echoed_txt").innerHTML = "";
@@ -57,7 +60,6 @@ function clearResponse() {
 
 var aud_digits = digit_list.map(digitToFile);
 
-var audioContext;
 var preload_digits = {
   type: 'preload',
   audio: aud_digits,
@@ -67,11 +69,8 @@ var fds_welcome = {
   type: 'html-button-response',
   stimulus: `
     <h2>Forward Digit Span Task</h2>
-    <p>Mode: <b>Audio (required)</b></p>
-    <button id="audioBtn" style="font-size:20px; margin-right:10px; background-color: #4CAF50;">Audio</button>
-    <button id="visualBtn" style="font-size:20px; background-color:lightgray;" disabled title="Visual mode not supported">Visual (disabled)</button>
-    <p>Number of trials (3-50):</p>
-    <input type="number" id="numTrials" value="12" min="3" max="50" style="font-size:18px; width:60px;">
+    <p>Audio mode only.</p>
+    <p>Max trials: ${fdsTotalTrials}</p>
     <p>Press Continue to start.</p>`,
   choices: ['Continue'],
   on_finish: function() {
@@ -79,65 +78,58 @@ var fds_welcome = {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
     if (audioContext.state === 'suspended') {
-      audioContext.resume().then(() => {
-        console.log('AudioContext resumed');
-      });
+      audioContext.resume();
     }
-    let nt = parseInt($('#numTrials').val());
-    fdsTotalTrials = (nt >= 3 && nt <= 50) ? nt : 12;
-    currentSpan = startingSpan;
-    fdsTrialNum = 1;
-    totalWrongCount = 0;
-    maxSpan = startingSpan;
-    spanHistory = [];
-    jsPsych.data.addProperties({BDS_modality: 'auditory'});
   }
 };
 
-// Setup trial
 var setup_fds = {
   type: 'html-button-response',
   stimulus: function() {
-    return `<p>Trial ${fdsTrialNum} of ${fdsTotalTrials}</p>
-            <p>Current Span: <b>${currentSpan}</b> | Max Span: <b>${maxSpan}</b> | Errors: <b>${totalWrongCount}/3</b></p>`;
+    return `<p>Span length: ${currentSpan}</p>
+            <p>Trial ${spanTrialCount+1} of 2 at this span</p>
+            <p>Max span so far: ${maxSpanPassed}</p>`;
   },
   choices: ['Begin'],
-  post_trial_gap: 500,
   on_finish: function() {
-    getStimuli(currentSpan); // Stimuli and correct ans for this trial
+    getStimuli(currentSpan);
     idx = 0;
     exitDigits = false;
-    spanHistory[fdsTrialNum-1] = currentSpan;
+    clearResponse();
   }
 };
 
-// Audio presentation of digits (one at a time, looping)
+var idx = 0;
+var exitDigits = false;
+
 var letter_fds = {
   type: 'audio-keyboard-response',
   stimulus: function() { return stimList[idx]; },
   choices: jsPsych.NO_KEYS,
   trial_ends_after_audio: true,
-  post_trial_gap: 200,
+  post_trial_gap: 300,
   on_finish: function() {
     idx++;
     if(idx >= stimList.length) exitDigits = true;
   }
 };
+
 var digit_loop = {
   timeline: [letter_fds],
-  loop_function: function() { return !exitDigits; }
+  loop_function: function() {
+    return !exitDigits;
+  }
 };
-// Response grid
+
 var response_grid = `
 <div style="text-align:center;">
   <p>What were the numbers <b>in order</b>?</p>
-  ${Array.from({length:9},(_,i)=> `<button class="num-button">${i+1}</button>`).join('')}
+  ${Array.from({length:9}, (_, i) => `<button class="num-button">${i+1}</button>`).join('')}
   <br><br>
-  <button class="clear-button" id="clearBtn">Clear</button>
+  <button id="clearBtn">Clear</button>
   <div><b>Current Answer:</b> <span id="echoed_txt"></span></div>
-</div>
-`;
-// Response collection
+</div>`;
+
 var fds_response_screen = {
   type: 'html-button-response',
   stimulus: response_grid,
@@ -147,50 +139,43 @@ var fds_response_screen = {
     $('#clearBtn').click(function() { clearResponse(); });
   },
   on_finish: function() {
-    let curans = response.slice();
-    let corans = fds_correct_ans;
-    let correct = (curans.length === corans.length && curans.every((v,i)=>v === corans[i]));
+    let correct = response.length === fds_correct_ans.length 
+                  && response.every((v, i) => v === fds_correct_ans[i]);
     if(correct) {
-      if(currentSpan > maxSpan) maxSpan = currentSpan;
-      currentSpan++; // increase span for next trial
-    } else {
-      totalWrongCount++; // global errors (not per span)
+      spanCorrectCount++;
+      maxSpanPassed = Math.max(maxSpanPassed, currentSpan);
     }
-    response = [];
+    spanTrialCount++;
+    if(spanTrialCount >= 2) {
+      // After two trials, check if passed span
+      if(spanCorrectCount >= 1) {
+        currentSpan++; // increase span length
+      } else {
+        // Task ends after 2 failures at this span
+        jsPsych.endExperiment(`Thank you for participating. Your final digit span score is ${maxSpanPassed}.`);
+      }
+      spanTrialCount = 0;
+      spanCorrectCount = 0;
+    }
     fdsTrialNum++;
-    jsPsych.data.addDataToLastTrial({
-      designation: 'FDS-RESPONSE',
-      span: currentSpan,
-      answer: curans,
-      correct: corans,
-      was_correct: correct,
-      spanHistory,
-      totalWrongCount
-    });
+    response = [];
   }
 };
 
-var fds_wrapup = {
-  type: 'html-button-response',
-  stimulus: function() {
-    return `<p>Thank you for participating. This concludes the forward digit span task.</p>
-            <p><b>Your final digit span score:</b> ${maxSpan}</p>`;
-  },
-  choices: ['Exit']
-};
+vartimeline = [
+  preload_digits,
+  fds_welcome,
+  setup_fds,
+  digit_loop,
+  fds_response_screen,
+];
 
-var fds_trial_block = {
-  timeline: [setup_fds, digit_loop, fds_response_screen],
+// Control main looping of trials
+var main_loop = {
+  timeline: timeline,
   loop_function: function() {
-    if (fdsTrialNum > fdsTotalTrials || totalWrongCount >= 3) return false;
-    return true;
+    return (fdsTrialNum < fdsTotalTrials);
   }
 };
 
-var timeline = [];
-timeline.push(preload_digits);
-timeline.push(fds_welcome);
-timeline.push(fds_trial_block);
-timeline.push(fds_wrapup);
-
-jsPsych.init({ timeline: timeline });
+jsPsych.init({ timeline: [main_loop] });
