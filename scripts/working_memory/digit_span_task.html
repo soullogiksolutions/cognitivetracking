@@ -1,10 +1,10 @@
 <html>
 <head>
-  <title>WM Digit Span with Researcher UI</title>
+  <title>Digit Span Test with Dynamic Settings</title>
   <script src="jspsych-6.0.4/jspsych.js"></script>
-  <script src="jspsych-6.0.4/plugins/jspsych-html-keyboard-response.js"></script>
-  <script src="jspsych-6.0.4/plugins/jspsych-survey-html-form.js"></script>
+  <script src="jspsych-6.0.4/plugins/jspsych-survey-text.js"></script>
   <script src="jspsych-6.0.4/plugins/jspsych-digit-span-recall.js"></script>
+  <script src="jspsych-6.0.4/plugins/jspsych-html-keyboard-response.js"></script>
   <script src="jspsych-6.0.4/plugins/jspsych-instructions.js"></script>
   <script src="jspsych-6.0.4/plugins/jspsych-fullscreen.js"></script>
   <link href="jspsych-6.0.4/css/jspsych_digitspan.css" rel="stylesheet" type="text/css"></link>
@@ -12,124 +12,258 @@
 <body></body>
 <script>
 
-// Global configuration variables with defaults
-var nTrials = 14;
-var minSetSize = 3;
-var stimuli_duration = 1000;
-var recall_duration = null;
-var allow_export = true;
-
-var possibleNumbers = ["1","2","3","4","5","6","7","8","9","0"];
-var selection;
+// Global variables to hold user settings and state
+var settings = {};
+var selection = [];
 var selection_id = -1;
 var nError = 0;
 var highest_span_score = 0;
 var consec_error_score = 0;
-
 var partN = "unknown";
 var IDsub = Date.now();
 
-// Researcher form setup using survey-html-form plugin
-var researcher_settings = {
-  type: 'survey-html-form',
-  html: `
-    <p style="font-size:20px; font-weight:bold;">Configure WM Digit Span Test</p>
-    
-    <label for="nTrials">Number of Trials:</label><br>
-    <input id="nTrials" name="nTrials" type="number" value="14" min="1" max="50" required><br><br>
-    
-    <label for="minSetSize">Minimum Digit Length:</label><br>
-    <input id="minSetSize" name="minSetSize" type="number" value="3" min="1" max="10" required><br><br>
-    
-    <label for="stimuli_duration">Stimuli Display Duration (ms):</label><br>
-    <input id="stimuli_duration" name="stimuli_duration" type="number" value="1000" min="100" max="5000" required><br><br>
-    
-    <label for="allow_export">Allow Data Export:</label><br>
-    <select id="allow_export" name="allow_export" required>
-      <option value="true" selected>Yes</option>
-      <option value="false">No</option>
-    </select><br><br>
-  `,
-  button_label: 'Start Experiment',
-  on_finish: function(data){
-    var responses = JSON.parse(data.responses);
-    nTrials = parseInt(responses.nTrials);
-    minSetSize = parseInt(responses.minSetSize);
-    stimuli_duration = parseInt(responses.stimuli_duration);
-    allow_export = responses.allow_export === "true";
-    // Initialize selection based on minSetSize
-    selection = jsPsych.randomization.sampleWithoutReplacement(possibleNumbers, minSetSize);
-  }
-};
+function buildMainTimeline() {
+  var timeline = [];
 
-// Participant ID collection (survey-text plugin used since you have it)
-var p_details = {
-  type: 'survey-text',
-  questions: [{prompt: "Enter participant number, name, or ID"}],
-  on_finish: function() {
-    partN = jsPsych.data.get().last(1).values()[0].partNum;
-    partN = partN.replace(/['"]+/g,'');
-  }
-};
-
-// Instructions and other trials remain mostly the same
-// ... (Use your existing instruction, stimulus, recall, feedback, and conclusion trials with minor adjustments to use new global variables)
-
-// For brevity, only show conclusion with export button
-
-var conclusion_html = function() {
-  var html = `<div style="font-size:20px;">
-    You have completed the task.<br>Thank you for your participation.<br><br>
-    Maximum number of digits recalled correctly was ${highest_span_score}.<br><br>
-    Maximum number of digits reached before two consecutive errors was ${consec_error_score}.<br><br>
-    Please tell the Research Assistant you have completed the task.<br><br>`;
-  if(allow_export){
-    html += `<button id="exportBtn">Export Results (CSV)</button>`;
-  }
-  html += `</div>`;
-  return html;
-};
-
-var conclusion = {
-  type: 'html-keyboard-response',
-  stimulus: conclusion_html,
-  choices: jsPsych.ALL_KEYS,
-  on_load: function(){
-    if(allow_export){
-      document.getElementById('exportBtn').addEventListener('click', function(){
-        const data = jsPsych.data.get().csv();
-        const filename = `WM_digit_span_${partN}_${IDsub}.csv`;
-        const blob = new Blob([data], {type: 'text/csv'});
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      });
+  // Participant ID collection trial
+  var p_details = {
+    type: 'survey-text',
+    questions: [{prompt: "Enter participant number, name, or ID"}],
+    on_finish: function() {
+      partN = jsPsych.data.get().last(1).values()[0].partNum;
+      partN = partN.replace(/['"]+/g,'');
     }
+  };
+  timeline.push(p_details);
+
+  // Instructions
+  var instructions = {
+    type: 'instructions',
+    pages: [`
+      <div style="font-size:20px;">
+        <b>INSTRUCTIONS</b><br><br>
+        You will see a sequence of numbers one by one.<br>
+        After the sequence, enter the numbers in the correct order.<br><br>
+        Example: '7 4 5 1' means entering '7 4 5 1'.<br><br>
+        First, you will do practice trials.<br>
+        Click 'Next' to begin.
+      </div>
+    `],
+    button_label_next: "Next",
+    show_clickable_nav: true,
+    allow_backward: false
+  };
+  timeline.push(instructions);
+
+  // Post practice instructions
+  var instructions_node = {
+    type: 'instructions',
+    pages: [`
+      <div style="font-size:20px;">
+        Practice trials are complete.<br><br>
+        If you have questions, ask the researcher.<br>
+        Otherwise, click 'Next' to start the main trials.
+      </div>
+    `],
+    button_label_next: "Next",
+    show_clickable_nav: true,
+    allow_backward: false,
+    on_finish: function() {
+      // Reset starting selection for main test
+      selection = jsPsych.randomization.sampleWithoutReplacement(["1","2","3","4","5","6","7","8","9","0"], settings.minSetSize);
+      selection_id = -1;
+      nError = 0;
+      highest_span_score = 0;
+      consec_error_score = 0;
+    }
+  };
+  timeline.push(instructions_node);
+
+  // Helper to get current sequence (updates with practice and main trials)
+  function getSelection() {
+    return selection;
   }
-};
 
-// Compose final timeline
-var timeline = [];
+  // Practice trial procedure (3 trials)
+  var practiceStack = {
+    timeline: [
+      {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+          selection_id++;
+          return `<div style="font-size:70px;">${selection[selection_id]}</div>`;
+        },
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 1000,
+        on_finish: function() {
+          if(selection_id + 1 >= selection.length) jsPsych.endCurrentTimeline(); 
+        }
+      },
+      {
+        type: 'digit-span-recall',
+        correct_order: getSelection,
+        on_finish: function(data) {
+          // no scoring necessary for practice here
+        }
+      },
+      {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+          const acc = jsPsych.data.get().last(1).values()[0].accuracy;
+          return acc == 1 ? `<div style="font-size:35px; color:green;"><b>Correct</b></div>` : `<div style="font-size:35px; color:red;"><b>Incorrect</b></div>`;
+        },
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 1000
+      }
+    ],
+    repetitions: 3
+  };
+  timeline.push(practiceStack);
 
-timeline.push(researcher_settings);
-timeline.push(p_details);
+  // Reset variables before main trials
+  timeline.push({
+    type: 'call-function',
+    func: function() {
+      selection = jsPsych.randomization.sampleWithoutReplacement(["1","2","3","4","5","6","7","8","9","0"], settings.minSetSize);
+      selection_id = -1;
+      nError = 0;
+      highest_span_score = 0;
+      consec_error_score = 0;
+    }
+  });
 
-// Add your other experiment blocks here as in your original script:
-// instructions, demo_procedure, instructions_node, test_procedure, fullscreen, etc.
+  // Main trial procedure
+  var mainStack = {
+    timeline: [
+      {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+          selection_id++;
+          return `<div style="font-size:70px;">${selection[selection_id]}</div>`;
+        },
+        choices: jsPsych.NO_KEYS,
+        trial_duration: settings.stimuli_duration,
+        on_finish: function() {
+          if(selection_id + 1 >= selection.length) jsPsych.endCurrentTimeline(); 
+        }
+      },
+      {
+        type: 'digit-span-recall',
+        correct_order: getSelection,
+        on_finish: function() {
+          const acc = jsPsych.data.get().last(1).values()[0].accuracy;
+          if (acc == 1) {
+            if (highest_span_score < settings.minSetSize) {
+              highest_span_score = settings.minSetSize;
+            }
+            settings.minSetSize++;
+            nError = 0;
+          } else if (nError < 1) {
+            nError++;
+          } else {
+            if (consec_error_score < settings.minSetSize) {
+              consec_error_score = settings.minSetSize;
+            }
+            settings.minSetSize = Math.max(3, settings.minSetSize - 1);
+          }
 
-// For now just add conclusion to demonstrate
-timeline.push(conclusion);
+          if (settings.minSetSize <= 8) {
+            selection = jsPsych.randomization.sampleWithoutReplacement(["1","2","3","4","5","6","7","8","9","0"], settings.minSetSize);
+          } else {
+            selection = jsPsych.randomization.sampleWithoutReplacement(["1","2","3","4","5","6","7","8","9","0"], 8);
+            var extra = settings.minSetSize - 8;
+            var id = selection.indexOf(selection[7]);
+            if (id !== -1) selection.splice(id, 1);
+            var extraNumbers = jsPsych.randomization.sampleWithoutReplacement(["1","2","3","4","5","6","7","8","9","0"], extra);
+            selection = selection.concat(extraNumbers);
+          }
+          selection_id = -1;
+        }
+      },
+      {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+          const acc = jsPsych.data.get().last(1).values()[0].accuracy;
+          return acc == 1 ? `<div style="font-size:35px; color:green;"><b>Correct</b></div>` : `<div style="font-size:35px; color:red;"><b>Incorrect</b></div>`;
+        },
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 1000
+      }
+    ],
+    repetitions: settings.nTrials
+  };
+  timeline.push(mainStack);
 
+  // Conclusion screen with optional export button
+  var conclusion_html = function() {
+    var html = `
+      <div style="font-size:20px;">
+        You have completed the task.<br>Thank you for your participation.<br><br>
+        Maximum number of digits recalled correctly was ${highest_span_score}.<br><br>
+        Maximum number of digits reached before two consecutive errors was ${consec_error_score}.<br><br>
+        Please tell the Research Assistant you have completed the task.<br><br>
+    `;
+    if(settings.allow_export) {
+      html += `<button id="exportBtn">Export Results (CSV)</button>`;
+    }
+    html += `</div>`;
+    return html;
+  };
+
+  timeline.push({
+    type: 'html-keyboard-response',
+    stimulus: conclusion_html,
+    choices: jsPsych.ALL_KEYS,
+    on_load: function() {
+      if(settings.allow_export) {
+        document.getElementById('exportBtn').addEventListener('click', function() {
+          const data = jsPsych.data.get().csv();
+          const filename = `WM_digit_span_${partN}_${IDsub}.csv`;
+          const blob = new Blob([data], { type: 'text/csv' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        });
+      }
+    }
+  });
+
+  // Fullscreen toggle end
+  timeline.push({ type: 'fullscreen', fullscreen_mode: false });
+
+  // Initialize jsPsych with the built timeline
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function() {
+      jsPsych.data.displayData(); // Remove if you don't want to show results
+    }
+  });
+}
+
+// Initial experiment config collection trial
 jsPsych.init({
-  timeline: timeline,
-  on_finish: function(){
-    jsPsych.data.displayData();
-  }
+  timeline: [{
+    type: 'survey-text',
+    questions: [
+      { prompt: "Number of trials (default 14)", name: 'nTrials', required: true },
+      { prompt: "Starting digit length (default 3)", name: 'minSetSize', required: true },
+      { prompt: "Digit display duration (ms, default 1000)", name: 'stimuli_duration', required: true },
+      { prompt: "Allow data export? (true/false, default true)", name: 'allow_export', required: true }
+    ],
+    on_finish: function(data) {
+      const responses = JSON.parse(data.responses);
+      settings.nTrials = parseInt(responses.nTrials) || 14;
+      settings.minSetSize = parseInt(responses.minSetSize) || 3;
+      settings.stimuli_duration = parseInt(responses.stimuli_duration) || 1000;
+      settings.allow_export = (responses.allow_export.toLowerCase() === 'true');
+      buildMainTimeline();
+    }
+  }]
 });
 
 </script>
