@@ -1,60 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Digit Span</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="jspsych-6.3.0/jspsych.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-audio-keyboard-response.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-html-button-response.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-call-function.js"></script>
-<script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-<script src="bds_adaptive.js"></script>
-
-<link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
-<link href="jspsych-6.3.0/css/bds-style.css" rel="stylesheet" type="text/css">
-
+  <meta charset="UTF-8">
+  <title>Forward Digit Span (Adaptive)</title>
+  <script src="https://unpkg.com/jspsych@7.3.3/dist/jspsych.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-button-response.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-keyboard-response.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-survey-text.js"></script>
+  <link href="https://unpkg.com/jspsych@7.3.3/dist/jspsych.css" rel="stylesheet" />
+  <style>
+    body { max-width: 600px; margin: auto; font-family: Arial, sans-serif; }
+    .jspsych-btn { margin-top: 20px; }
+  </style>
 </head>
-<body>
+<body></body>
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-//Define Timeline
-var timeline = [];
+  // -------------------
+  // Initialize JsPsych
+  // -------------------
+  const jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
 
+  // -------------------
+  // Parameters
+  // -------------------
+  let max_trials = 10;           // user will set from start page
+  let wrong_count = 0;
+  let current_span = 3;          // start span length
+  let trial_number = 0;
+  let max_span_reached = current_span;
 
-//Function to give the option for a local save of the data
-var localSave;
+  // -------------------
+  // Welcome & Parameter Input
+  // -------------------
+  let start_page = {
+    type: jsPsychSurveyText,
+    preamble: `<h2>Forward Digit Span Task</h2>
+      <p>You will see sequences of digits, one at a time.<br>
+      Try to recall them in the exact forward order.<br>
+      The sequence will get longer if you get it right.</p>
+      <p>The test ends after <b>3 mistakes</b>, or until you reach your chosen number of trials.</p>`,
+    questions: [
+      {prompt: "Maximum number of trials (default = 10):", name: "max_trials", required: false}
+    ],
+    button_label: "Continue",
+    on_finish: function(data) {
+      let val = data.response.max_trials.trim();
+      if(val !== "" && !isNaN(val)) {
+        max_trials = parseInt(val);
+      }
+    }
+  };
 
-function saveData() {
-	if(localSave == 1) {
-		var identifier = 'BDS_'+Math.round(new Date().getTime()/1000)+'.csv';
-		jsPsych.data.get().localSave('csv',identifier);
-		alert("You may now close this tab.");
-	} else {
-		alert("You may now close this tab.");
-		}
-	};
+  // -------------------
+  // Functions for generating digits and trials
+  // -------------------
+  function generateDigits(n) {
+    let digits = [];
+    for(let i=0;i<n;i++) {
+      digits.push(Math.floor(Math.random()*9)+1); // digits 1-9
+    }
+    return digits;
+  }
 
-//Final screen
-var save_data = {
-	type: 'html-button-response',
-	stimulus: '<p>This concludes the task. Would you like to save the data?</p>',
-	choices: ['No','Yes'],
-	on_finish: function(data){
-		localSave = jsPsych.data.get().last(1).values()[0].response;
-	}
-};
+  function makeTrial() {
+    trial_number++;
 
-//Push components to experiment timeline
-timeline.push(bds_adaptive); //from bds_adaptive.js
-timeline.push(save_data); //final screen asking about data
+    let digits = generateDigits(current_span);
+    let digit_string = digits.join("");
 
-//Initialize the Experiment
-jsPsych.init({
-	timeline: timeline,
-	on_finish: saveData
+    // show digits sequentially
+    let show_digits = [];
+    digits.forEach((d) => {
+      show_digits.push({
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `<div style="font-size:48px">${d}</div>`,
+        choices: "NO_KEYS",
+        trial_duration: 1000
+      });
+      show_digits.push({
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "",
+        choices: "NO_KEYS",
+        trial_duration: 300
+      });
+    });
+
+    // recall input
+    let recall = {
+      type: jsPsychSurveyText,
+      questions: [{prompt: "Enter the digits in order:", name: "recall"}],
+      button_label: "Submit",
+      on_finish: function(data) {
+        let response = data.response.recall.replace(/\s+/g,"");
+        if(response === digit_string) {
+          data.correct = true;
+          current_span++;  // increase span if correct
+          if(current_span > max_span_reached) {
+            max_span_reached = current_span;
+          }
+        } else {
+          data.correct = false;
+          wrong_count++;
+        }
+      }
+    };
+
+    return {
+      timeline: [...show_digits, recall],
+      on_timeline_finish: function() {
+        // check stop conditions
+        if(wrong_count >= 3 || trial_number >= max_trials) {
+          jsPsych.endCurrentTimeline();
+        }
+      }
+    };
+  }
+
+  // -------------------
+  // Procedure
+  // -------------------
+  let procedure = {
+    timeline: [ makeTrial() ],
+    loop_function: function() {
+      if(wrong_count < 3 && trial_number < max_trials) {
+        jsPsych.addNodeToEndOfTimeline(makeTrial());
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  // -------------------
+  // End screen
+  // -------------------
+  let end_screen = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: function() {
+      return `<h2>Task Complete</h2>
+        <p>You finished after ${trial_number} trials.</p>
+        <p>Total mistakes: ${wrong_count}</p>
+        <p>Max span reached: ${max_span_reached}</p>`;
+    },
+    choices: ["Finish"]
+  };
+
+  // -------------------
+  // Timeline Build
+  // -------------------
+  jsPsych.run([
+    start_page,
+    procedure,
+    end_screen
+  ]);
+
 });
-
 </script>
-</body>
 </html>
