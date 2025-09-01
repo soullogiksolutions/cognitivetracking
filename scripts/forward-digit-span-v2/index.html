@@ -1,165 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Forward Digit Span (Adaptive)</title>
+  <meta charset="UTF-8" />
+  <title>Forward Digit Span - Adaptive Audio Version</title>
   <script src="https://unpkg.com/jspsych@7.3.3/dist/jspsych.js"></script>
   <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-button-response.js"></script>
-  <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-keyboard-response.js"></script>
-  <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-survey-text.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-audio-keyboard-response.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3/dist/plugin-html-button-response.js"></script>
   <link href="https://unpkg.com/jspsych@7.3.3/dist/jspsych.css" rel="stylesheet" />
   <style>
-    body { max-width: 600px; margin: auto; font-family: Arial, sans-serif; }
-    .jspsych-btn { margin-top: 20px; }
+    body { max-width: 600px; margin: 2em auto; font-family: Arial, sans-serif; }
+    .num-button { font-size: 24px; width: 48px; height: 48px; margin: 4px; }
+    #answer-display { min-height: 2em; font-size: 24px; font-weight: bold; margin-top: 10px; }
   </style>
 </head>
 <body></body>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function () {
 
-  // -------------------
-  // Initialize JsPsych
-  // -------------------
-  const jsPsych = initJsPsych({
-    on_finish: function() {
-      jsPsych.data.displayData();
-    }
-  });
-
-  // -------------------
-  // Parameters
-  // -------------------
-  let max_trials = 10;           // user will set from start page
-  let wrong_count = 0;
-  let current_span = 3;          // start span length
-  let trial_number = 0;
-  let max_span_reached = current_span;
-
-  // -------------------
-  // Welcome & Parameter Input
-  // -------------------
-  let start_page = {
-    type: jsPsychSurveyText,
-    preamble: `<h2>Forward Digit Span Task</h2>
-      <p>You will see sequences of digits, one at a time.<br>
-      Try to recall them in the exact forward order.<br>
-      The sequence will get longer if you get it right.</p>
-      <p>The test ends after <b>3 mistakes</b>, or until you reach your chosen number of trials.</p>`,
-    questions: [
-      {prompt: "Maximum number of trials (default = 10):", name: "max_trials", required: false}
-    ],
-    button_label: "Continue",
-    on_finish: function(data) {
-      let val = data.response.max_trials.trim();
-      if(val !== "" && !isNaN(val)) {
-        max_trials = parseInt(val);
-      }
-    }
-  };
-
-  // -------------------
-  // Functions for generating digits and trials
-  // -------------------
-  function generateDigits(n) {
-    let digits = [];
-    for(let i=0;i<n;i++) {
-      digits.push(Math.floor(Math.random()*9)+1); // digits 1-9
-    }
-    return digits;
-  }
-
-  function makeTrial() {
-    trial_number++;
-
-    let digits = generateDigits(current_span);
-    let digit_string = digits.join("");
-
-    // show digits sequentially
-    let show_digits = [];
-    digits.forEach((d) => {
-      show_digits.push({
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: `<div style="font-size:48px">${d}</div>`,
-        choices: "NO_KEYS",
-        trial_duration: 1000
-      });
-      show_digits.push({
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: "",
-        choices: "NO_KEYS",
-        trial_duration: 300
-      });
+    const jsPsych = initJsPsych({
+      on_finish: () => jsPsych.data.displayData()
     });
 
-    // recall input
-    let recall = {
-      type: jsPsychSurveyText,
-      questions: [{prompt: "Enter the digits in order:", name: "recall"}],
-      button_label: "Submit",
-      on_finish: function(data) {
-        let response = data.response.recall.replace(/\s+/g,"");
-        if(response === digit_string) {
-          data.correct = true;
-          current_span++;  // increase span if correct
-          if(current_span > max_span_reached) {
-            max_span_reached = current_span;
+    // Folder with digit audio files named one.wav ... nine.wav
+    const audioFolder = "digits/";
+
+    // Mapping digits to audio file names
+    const digitAudioFiles = {
+      1: "one.wav",
+      2: "two.wav",
+      3: "three.wav",
+      4: "four.wav",
+      5: "five.wav",
+      6: "six.wav",
+      7: "seven.wav",
+      8: "eight.wav",
+      9: "nine.wav"
+    };
+
+    // Parameters & state
+    let maxTrials = 10;
+    let currentSpan = 3;
+    let maxSpanReached = 3;
+    let trialNumber = 0;
+    const maxMistakes = 3;
+    let mistakes = 0;
+    let currentDigits = [];
+    let userResponse = [];
+
+    // Preload audio files
+    const preloadAudio = {
+      type: "preload",
+      audio: Object.values(digitAudioFiles).map(f => audioFolder + f)
+    };
+
+    // Start screen for parameters selection
+    const startScreen = {
+      type: "html-button-response",
+      stimulus: `
+        <h2>Forward Digit Span Task</h2>
+        <p>You will hear sequences of digits played one by one.</p>
+        <p>After the sequence, enter the digits you recall in the same order by clicking number buttons.</p>
+        <p>The sequence length will adapt based on your performance.</p>
+        <p>Select number of trials:</p>
+        <input type="number" id="numTrials" value="${maxTrials}" min="3" max="50" style="font-size:18px; width: 80px;"><br><br>
+        <p>Press Start to begin.</p>`,
+      choices: ["Start"],
+      on_load: () => {
+        // Fix audio context resume on Chrome auto-play policies
+        if (jsPsych.pluginAPI.audioContext()) {
+          if (jsPsych.pluginAPI.audioContext().state === 'suspended') {
+            jsPsych.pluginAPI.audioContext().resume();
           }
-        } else {
-          data.correct = false;
-          wrong_count++;
+        }
+      },
+      on_finish: function (data) {
+        const val = document.getElementById('numTrials').value;
+        const parsed = parseInt(val);
+        if (!isNaN(parsed) && parsed >= 3 && parsed <= 50) {
+          maxTrials = parsed;
         }
       }
     };
 
-    return {
-      timeline: [...show_digits, recall],
-      on_timeline_finish: function() {
-        // check stop conditions
-        if(wrong_count >= 3 || trial_number >= max_trials) {
-          jsPsych.endCurrentTimeline();
-        }
+    // Generate a random digit sequence of length n with digits from 1 to 9
+    function generateDigits(n) {
+      const digits = [];
+      for (let i = 0; i < n; i++) {
+        digits.push(Math.floor(Math.random() * 9) + 1);
       }
-    };
-  }
-
-  // -------------------
-  // Procedure
-  // -------------------
-  let procedure = {
-    timeline: [ makeTrial() ],
-    loop_function: function() {
-      if(wrong_count < 3 && trial_number < max_trials) {
-        jsPsych.addNodeToEndOfTimeline(makeTrial());
-        return true;
-      } else {
-        return false;
-      }
+      return digits;
     }
-  };
 
-  // -------------------
-  // End screen
-  // -------------------
-  let end_screen = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: function() {
-      return `<h2>Task Complete</h2>
-        <p>You finished after ${trial_number} trials.</p>
-        <p>Total mistakes: ${wrong_count}</p>
-        <p>Max span reached: ${max_span_reached}</p>`;
-    },
-    choices: ["Finish"]
-  };
+    // Play digit audio files one by one in sequence
+    // Returns timeline that plays each audio in stimList sequentially
+    function playDigitsAudioTimeline(digitsList) {
+      const timeline = digitsList.map(digit => ({
+        type: "audio-keyboard-response",
+        stimulus: audioFolder + digitAudioFiles[digit],
+        choices: "NO_KEYS",
+        trial_ends_after_audio: true,
+        response_ends_trial: false,
+        post_trial_gap: 300
+      }));
+      return timeline;
+    }
 
-  // -------------------
-  // Timeline Build
-  // -------------------
-  jsPsych.run([
-    start_page,
-    procedure,
-    end_screen
-  ]);
+    // UI for user to input recalled digits (click buttons)
+    // Returns a trial that shows number buttons, displays user input, Submit & Clear buttons
+    const userInputTrial = {
+      type: "html-button-response",
+      stimulus: function () {
+        return `
+          <p>Enter the digits you heard <b>in order</b> by clicking the buttons below:</p>
+          <div id="num-buttons" style="margin-bottom:10px;">
+            ${[1,2,3,4,5,6,7,8,9].map(n => `<button class="num-button" data-num="${n}">${n}</button>`).join('')}
+          </div>
+          <button id="clear-btn" style="font-size:16px; margin-right:15px;">Clear</button>
+          <div><b>Your Answer:</b> <span id="answer-display"></span></div>
+        `;
+      },
+      choices: ["Submit"],
+      on_load: function () {
+        userResponse = [];
+        const answerDisplay = document.getElementById("answer-display");
 
-});
+        document.querySelectorAll(".num-button").forEach(btn => {
+          btn.onclick = () => {
+            const digit = btn.getAttribute("data-num");
+            userResponse.push(Number(digit));
+            answerDisplay.textContent = userResponse.join(" ");
+          };
+        });
+
+        document.getElementById("clear-btn").onclick = () => {
+          userResponse = [];
+          answerDisplay.textContent = "";
+        };
+      },
+      on_finish: function () {
+        // Check correctness
+        const correct = arraysEqual(userResponse, currentDigits);
+        jsPsych.data.addDataToLastTrial({userResponse, correct, targetDigits: currentDigits, spanLength: currentSpan, trialNumber});
+        if (correct) {
+          currentSpan++;
+          if(currentSpan > maxSpanReached) maxSpanReached = currentSpan;
+        } else {
+          mistakes++;
+        }
+        trialNumber++;
+      }
+    };
+
+    function arraysEqual(a,b) {
+      if (a.length !== b.length) return false;
+      for(let i=0; i<a.length; i++) if (a[i] !== b[i]) return false;
+      return true;
+    }
+
+    // Trial setup - generate digits and prepare timeline to play them
+    function trialSetup() {
+      currentDigits = generateDigits(currentSpan);
+      return playDigitsAudioTimeline(currentDigits);
+    }
+
+    // Loop controlling the adaptive trials
+    const adaptiveLoop = {
+      timeline: [
+        {
+          timeline: trialSetup(),
+          loop_function: function() { return false; }
+        },
+        userInputTrial
+      ],
+      loop_function: function() {
+        // Stop if mistakes >= maxMistakes or trials reached maxTrials
+        if (mistakes >= maxMistakes || trialNumber >= maxTrials) {
+          return false;
+        }
+        return true;
+      }
+    };
+
+    // Final screen summarizing results
+    const finalScreen = {
+      type: "html-button-response",
+      stimulus: () => `
+        <h2>Task Complete</h2>
+        <p>Trials completed: ${trialNumber}</p>
+        <p>Maximum digit span reached: ${maxSpanReached}</p>
+        <p>Total mistakes: ${mistakes}</p>
+        <p>Thank you for participating!</p>
+      `,
+      choices: ["Finish"]
+    };
+
+    // Run experiment timeline
+    jsPsych.run([
+      preloadAudio,
+      startScreen,
+      adaptiveLoop,
+      finalScreen
+    ]);
+  });
 </script>
+
 </html>
