@@ -3,286 +3,157 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Soul Logik | Cognitive Assessments for Tracking Working Memory</title>
-  <meta name="description" content="Offline cognitive tracking designed for personal privacy">
-  <meta name="keywords" content="cognitive assessment">
-  <meta name="author" content="Soul Logik">
-  <link rel="shortcut icon" href="favicon.ico">
+  <title>Soul Logik | Proactive, Private Cognitive Health Monitoring</title>
+  <meta name="description" content="Next-generation cognitive health screening for individuals and research. Privacy-first. Millisecond-precision. Exportable results.">
+  <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
- <style>
-  /* Base typography and colors */
-  body, h1, h2, h3, h4, h5, h6, p {
-    font-family: "Arial", sans-serif;
-    color: #222222;
-    background-color: #F4F4F9;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-  }
-
-  .w3-navbar, h1, button {
-    font-family: "Arial", sans-serif;
-  }
-
-  /* Navbar banner background - deep accessible purple */
-  ul {
-    background-color: #3B2E63;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  a:hover, a:focus {
-    color: #6D5ACF; /* Lighter purple accent */
-    outline: none;
-  }
-
-  /* Headings - slightly darker purple/gray */
-  h1, h2, h3 {
-    color: #222222;
-    font-weight: 600;
-  }
-
-  p {
-    color: #333333;
-  }
-
-  /* Horizontal rules */
-  hr.rounded {
-    border-top: 3px solid #ddd;
-    border-radius: 0;
-    width: 100%;
-    margin: 20px 0;
-  }
-
-  hr {
-    border: 0;
-    clear: both;
-    display: block;
-    width: 100%;
-    background-color: #ddd;
-    height: 1px;
-  }
-
-  /* Buttons styling */
-  button {
-    background-color: #fff;
-    border: 2px solid #3B2E63;
-    border-radius: 5px;
-    margin: 5px;
-    cursor: pointer;
-    padding: 6px 12px;
-    color: #3B2E63;
-    font-weight: 600;
-    transition: all 0.2s ease-in-out;
-  }
-
-  button:hover,
-  button:focus {
-    background-color: #6D5ACF;
-    color: white;
-    border-color: #6D5ACF;
-    outline: none;
-  }
-
-  /* Footer styling */
-  .w3-container.w3-grey {
-    background: #3B2E63 !important;
-  }
-
-  .w3-container.w3-grey h1 {
-    color: #ccc;
-    font-size: 0.9rem;
-    font-weight: 400;
-    margin: 0;
-  }
-
-  /* Accessibility enhancements: focus outline */
-  a:focus,
-  button:focus {
-    outline: 3px solid #6D5ACF;
-    outline-offset: 2px;
-  }
-</style>
-
-
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Roboto', Arial, sans-serif; background: #F4F4F9; margin: 0; color: #222; }
+    h1, h2, h3 { font-family: 'Montserrat', Arial, sans-serif; color: #2d244c; }
+    .navbar { background: #3B2E63; padding: 16px 0; }
+    .navbar a { color: #fff; font-weight: 600; text-decoration: none; margin: 0 18px; }
+    .navbar a:hover { color: #6D5ACF; }
+    .header { text-align: center; padding: 60px 20px 40px 20px; background: #fff; }
+    .header h1 { font-size: 2.8em; margin-bottom: 0.5em; }
+    .header p { font-size: 1.2em; max-width: 600px; margin: auto; color: #4a4472; }
+    .mission-section, .assessments-section { max-width: 900px; margin: 40px auto; padding: 25px 30px; background: #fff; border-radius: 12px; box-shadow: 0 2px 6px #e0e0ef; }
+    .mission-section img { max-width: 140px; float: right; margin-left: 22px; }
+    .mission-section h2 { margin-top: 0; }
+    .features-list { list-style: none; padding: 0; margin: 20px 0; }
+    .features-list li { margin: 14px 0; padding-left: 2em; position: relative; }
+    .features-list li::before { content: "✔"; position: absolute; left: 0; color: #6D5ACF; font-size: 1.2em; }
+    .cta-btn { background: #6D5ACF; color: #fff; padding: 14px 36px; border: none; border-radius: 6px; font-size: 1.1em; cursor: pointer; margin: 20px 0 0 0; font-family: 'Montserrat', sans-serif; font-weight: bold; }
+    .cta-btn:hover { background: #4a4472; }
+    .hr { border:0; border-top: 2px solid #eee; margin: 40px 0; }
+    .assessment-card { background: #f5f5fa; border-radius: 8px; padding: 24px; margin-bottom: 22px; box-shadow: 0 1px 3px #e0e0ef; }
+    .assessment-card h3 { margin-top: 0; color: #e31838; }
+    .assessment-actions a { margin-right: 15px; background: #3B2E63; color: #fff; padding: 8px 18px; border-radius: 4px; text-decoration: none; display: inline-block; font-weight: 600;}
+    .assessment-actions a:hover { background: #6D5ACF; }
+    .faq-section { max-width: 900px; margin: 35px auto; }
+    .faq-section details { background: #fff; border-radius: 7px; margin-bottom: 16px; box-shadow: 0 1px 3px #e0e0ef; padding: 14px 22px; }
+    .faq-section summary { font-weight: bold; color: #3B2E63; cursor: pointer; }
+    footer { background: #3B2E63; color: #cccbde; text-align: center; padding: 22px 10px; margin-top: 60px; }
+    @media (max-width: 600px) {
+      .mission-section img { display: none; }
+      .mission-section, .assessments-section, .faq-section { padding: 10px 5px; }
+      .header { padding: 38px 6px 22px 6px; }
+    }
+  </style>
 </head>
 <body>
+
 <!-- Navbar -->
-<div class="w3-top">
-  <ul class="w3-navbar w3-card-2 w3-left-align w3-large">
-    <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
-      <a class="w3-padding-large w3-hover-white w3-large w3-grey" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-    </li>
-    <li><a href="#" class="w3-padding-large w3-hover-white" style="color:white;">Soul Logik</a></li>
-    <li class="w3-hide-small"><a href="#assessments" class="w3-padding-large w3-white">Assessments</a></li>
-    <li class="w3-hide-small"><a href="https://soullogik.substack.com" class="w3-padding-large w3-hover-white" style="color:white;" target="_blank" rel="noopener noreferrer">Blog</a></li>
-  </ul>
-
-  <!-- Navbar on small screens -->
-  <div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium">
-    <ul class="w3-navbar w3-left-align w3-large w3-indigo">
-      <li><a class="w3-padding-large" style="color:white;" href="#">Soul Logik</a></li>
-      <li><a class="w3-padding-large" style="color:white;" href="#assessments">Assessments</a></li>
-      <li><a class="w3-padding-large" style="color:white;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">Blog</a></li>
-    </ul>
+<nav class="navbar w3-card-2">
+  <div style="max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:1.4em;font-weight:700;">
+      <a href="#">Soul Logik</a>
+    </div>
+    <div>
+      <a href="#mission">Mission</a>
+      <a href="#assessments">Assessments</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">Blog</a>
+      <a href="https://www.patreon.com/SoulLogik" target="_blank" rel="noopener noreferrer">Support</a>
+    </div>
   </div>
-</div>
+</nav>
 
-<!-- Header -->
-<header class="w3-container w3-white w3-center w3-padding-64">
-  <h1 class="w3-margin w3-xxlarge"><b>Soul Logik</b></h1>
-  <p class="w3-large" style="max-width:600px; margin:auto; text-align:center;">
-    Cogntive assessments for tracking working memory<br>
-    These tools are intended to be used by researchers to track working memory in a controlled environment. User data is not saved for privacy. Most of the tests work in mobile or browser and some work offline.
+<!-- Hero Header -->
+<section class="header">
+  <h1>Monitor Brain Health Proactively, Privately, and Scientifically</h1>
+  <p>
+    Empower your mind with breakthrough cognitive assessments that bring peace of mind and actionable insight—while keeping your data safe and private.
+    <br><br>
+    <button class="cta-btn" onclick="window.location='#assessments';">Get Started</button>
   </p>
-</header>
+</section>
 
-<!-- Overview -->
-<div class="w3-row-padding w3-padding-16 w3-container" id="overview">
-  <div class="w3-content">
-    <div class="w3-threequarter">
-      <h2 class="w3-large"><b>Our Mission</b></h2>
-      <p style="text-align:justify;">
-        Soul Logik offers a suite of innovative, privacy-first cognitive assessments designed specifically for researchers and individuals who want secure, transparent tools to monitor working memory and brain health.
+<!-- Mission Section -->
+<section class="mission-section" id="mission">
+  <img src="https://i.ibb.co/Dcbj7zn/soullogik-1.png" alt="Soul Logik logo">
+  <h2>Our Mission</h2>
+  <p>Soul Logik exists to <strong>banish fear about brain health</strong> by putting science, privacy, and real-time insight in your hands. We design next-generation cognitive tracking tools that empower you—and your healthcare team—to detect change early, access expert support, and act proactively.</p>
+  <ul class="features-list">
+    <li><strong>Privacy-first:</strong> Data stays on your device, no sign-in or sharing needed.</li>
+    <li><strong>Precision:</strong> Millisecond timing, customizable for researchers and clinics.</li>
+    <li><strong>Actionable alerts:</strong> Get notified about meaningful changes—share results with your chosen medical professionals.</li>
+    <li><strong>Inclusive:</strong> Accessible designs for all abilities, mobile and offline compatible.</li>
+    <li><strong>Expert support:</strong> Connect to leading neuro coaches and healthcare partners* for real insight.</li>
+  </ul>
+  <p style="margin-top:20px;font-size:0.95em;color:#666;">*Coming soon: Integrated network of credentialed experts and partner clinics for seamless follow-up.</p>
+</section>
 
-Our assessments run fully offline or in private browser tabs, requiring no personal data collection or storage—your privacy is our priority. 
-       </p>
-      <p style="text-align:justify;">
-        They’re optimized for mobile and desktop use and built with accessibility in mind. We develop effective cognitive assessment tools that empower researchers and individuals alike to safely track cognitive function over time, without compromising privacy or security. Transparency in how our tools work and data is handled lies at the heart of everything we build. Learn more in our About section.
-       </p>
-    </div>
-    <div class="w3-quarter w3-right">
-      <figure>
-        <img src="https://i.ibb.co/Dcbj7zn/soullogik-1.png" alt="Soul Logik logo"
-  style="width: 100%; max-width: 200px; height: auto; display: block; margin: 0 auto;">
-      </figure>
-    </div>
-  </div>
-</div>
-
-<hr class="rounded">
+<hr class="hr">
 
 <!-- Assessments Section -->
-<div class="w3-row-padding w3-padding-16 w3-container w3-light-grey" id="assessments">
-  <div class="w3-content">
-    <div class="w3-threequarter">
-      <h2 class="w3-large"><b>Available Cognitive Assessments</b></h2>
-
-      <h3 class="w3-padding-16"><b style="color:#e31838;">Digit Span</b>
-        <div style="float:right;">
-          <button><a style="text-decoration: none; color:inherit;" href="https://soullogiksolutions.github.io/cognitivetracking/scripts/working_memory/digit_span_task.html" target="_blank" rel="noopener noreferrer">Start Assessment</a></button>
-          <button><a style="text-decoration: none; color:inherit;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">About Test</a></button>
-        </div>
-      </h3>
-      <p style="text-align:justify;">
-        Digit span assesses short-term memory by having participants recall sequences as given. Typical duration is 8-10 minutes.
-      </p>
-      <hr>
-
-      <h3 class="w3-padding-16"><b style="color:#e31838;">Auditory N-Back</b>
-        <div style="float:right;">
-          <button><a style="text-decoration: none; color:inherit;" href="https://soullogiksolutions.github.io/cognitivetracking/scripts/n-back/" target="_blank" rel="noopener noreferrer">Start Assessment</a></button>
-          <button><a style="text-decoration: none; color:inherit;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">About Test</a></button>
-        </div>
-      </h3>
-      <p style="text-align:justify;">
-        Auditory N-Back challenges working memory with customizable auditory sequences presented offline. You can use this to train working memory.
-      </p>
-      <hr>
-
-      <h3 class="w3-padding-16"><b style="color:#e31838;">Reading Span</b>
-        <div style="float:right;">
-          <button><a style="text-decoration: none; color:inherit;" href="https://soullogiksolutions.github.io/cognitivetracking//scripts/reading-span/" target="_blank" rel="noopener noreferrer">Start Assessment</a></button>
-          <button><a style="text-decoration: none; color:inherit;" href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">About Test</a></button>
-        </div>
-      </h3>
-      <p style="text-align:justify;">
-        The Reading Span task combines sentence judgment and letter memorization to track working memory capacity. Duration is approximately 15-20 minutes.
-      </p>
-      <hr>
-
-      <!-- Add additional assessments similarly as needed -->
-
+<section class="assessments-section" id="assessments">
+  <h2>Available Cognitive Assessments</h2>
+  <div class="assessment-card">
+    <h3>Digit Span</h3>
+    <p>
+      Assess your short-term memory with this classic cognitive science tool. Recall sequences of numbers—graded in length—for a simple, science-backed memory snapshot.
+    </p>
+    <div class="assessment-actions">
+      <a href="https://soullogiksolutions.github.io/cognitivetracking/scripts/working_memory/digit_span_task.html" target="_blank">Start Now</a>
+      <a href="https://soullogik.substack.com" target="_blank">More Info</a>
     </div>
   </div>
-</div>
-
-  <!-- FAQ Section -->
-<div class="w3-container w3-padding-16" id="faq">
-  <h2 class="w3-large"><b>Frequently Asked Questions</b></h2>
-  
-  <button onclick="toggleFAQ('q1')" class="w3-button w3-block w3-left-align w3-light-grey w3-margin-top">Why choose us?</button>
-  <div id="q1" class="w3-hide w3-container w3-white w3-padding">
-    <p>We designed these tests so that no emails or personal data required. Your data stays on your device unless you choose to export it.</p>
+  <div class="assessment-card">
+    <h3>Auditory N-Back</h3>
+    <p>
+      Challenge your working memory and attention with sequences of sounds. Customize task difficulty and track your progress—offline, with millisecond accuracy.
+    </p>
+    <div class="assessment-actions">
+      <a href="https://soullogiksolutions.github.io/cognitivetracking/scripts/n-back/" target="_blank">Start Now</a>
+      <a href="https://soullogik.substack.com" target="_blank">More Info</a>
+    </div>
   </div>
-
-  <button onclick="toggleFAQ('q2')" class="w3-button w3-block w3-left-align w3-light-grey w3-margin-top">How do the assessments protect my privacy?</button>
-  <div id="q2" class="w3-hide w3-container w3-white w3-padding">
-    <p>Designed to work without internet connectivity and accessible to users with diverse abilities while maintaining milisecond precision and customizable options for researchers.</p>
+  <div class="assessment-card">
+    <h3>Reading Span</h3>
+    <p>
+      Combine sentence logic with memory recall for a comprehensive view of your working memory span. Insights you can trust in 15-20 minutes.
+    </p>
+    <div class="assessment-actions">
+      <a href="https://soullogiksolutions.github.io/cognitivetracking//scripts/reading-span/" target="_blank">Start Now</a>
+      <a href="https://soullogik.substack.com" target="_blank">More Info</a>
+    </div>
   </div>
-  
-<!-- Patreon Support Section -->
-<button onclick="toggleFAQ('patreonContent')" class="w3-button w3-block w3-left-align w3-light-grey w3-margin-top">
-  Support Soul Logik on Patreon
-</button>
-<div id="patreonContent" class="w3-hide w3-container w3-white w3-padding">
-  <p>
-    If you find our cognitive assessments and privacy-first tools valuable, please consider supporting us on 
-    <a href="https://www.patreon.com/SoulLogik" target="_blank" rel="noopener noreferrer" style="color:#6D5ACF;">Patreon</a>. 
-    Your support helps us continue building accessible, privacy-conscious brain health tools for everyone.
-  </p>
-</div>
+  <!-- Add more assessments as needed -->
+</section>
 
-<!-- Accessibility Section -->
-<button onclick="toggleFAQ('accessibilityContent')" class="w3-button w3-block w3-left-align w3-light-grey w3-margin-top">
-  Built for Accessibility
-</button>
-<div id="accessibilityContent" class="w3-hide w3-container w3-white w3-padding">
-  <p>
-    Soul Logik is designed with accessibility in mind to ensure everyone can benefit from our tools. We follow best practices including 
-    high contrast color schemes, keyboard navigation support, and screen reader compatibility. We continuously improve based on user feedback 
-    to make cognitive assessments inclusive for people with diverse abilities.
-  </p>
-</div>
+<hr class="hr">
 
+<!-- FAQ Section -->
+<section class="faq-section" id="faq">
+  <h2>Frequently Asked Questions</h2>
+  <details>
+    <summary>How is my privacy protected?</summary>
+    <p>No registration needed. All results and data remain fully local to your device unless you choose to export/share them. Assessments work offline for your peace of mind.</p>
+  </details>
+  <details>
+    <summary>Who can use these tools?</summary>
+    <p>Our assessments are designed for researchers, clinicians, and individuals—no prior experience required. Accessible design ensures everyone can benefit, with no technical or medical background needed.</p>
+  </details>
+  <details>
+    <summary>Are results clinically validated?</summary>
+    <p>We use scientifically recognized assessment protocols and research-grade accuracy. For clinical interpretation or diagnosis, always consult with a medical professional. Coming soon: In-app connections to expert coaches and healthcare partners.</p>
+  </details>
+  <details>
+    <summary>How do I get support or ask questions?</summary>
+    <p>Contact us through our blog or Patreon, or sign up for premium support with one of our expert neuro coaches (launching soon).</p>
+  </details>
+  <details>
+    <summary>Can businesses or clinics partner with Soul Logik?</summary>
+    <p>Yes. We offer custom solutions and partnership integrations for research teams, private clinics, and digital health providers. <br><a href="mailto:partner@soullogik.com" style="color:#6D5ACF;">Contact us</a> for details.</p>
+  </details>
+</section>
 
-</div>
-
-<div class="w3-container w3-grey w3-center w3-opacity w3-padding-16">
-  <h1 style="color: black !important;" class="w3-margin w3-large">© Soul Logik 2025. All rights reserved. Tools are provided for free and we make no guarantees.</h1>
-</div>
-
-
-<script>
-  // Toggle menu on small screens
-  function myFunction() {
-    var x = document.getElementById("navDemo");
-    if (x.className.indexOf("w3-show") === -1) {
-      x.className += " w3-show";
-    } else {
-      x.className = x.className.replace(" w3-show", "");
-    }
-  }
-</script>
-
-<script>
-  // Toggle FAQ answer display
-  function toggleFAQ(id) {
-    var x = document.getElementById(id);
-    if (x.className.indexOf("w3-show") == -1) {
-      x.className += " w3-show";
-    } else {
-      x.className = x.className.replace(" w3-show", "");
-    }
-  }
-</script>
+<footer>
+  &copy; 2025 Soul Logik. All rights reserved. Tools provided free. No clinical claims. <br>
+  Site designed for accessibility and privacy-first brain health empowerment.
+</footer>
 
 </body>
 </html>
