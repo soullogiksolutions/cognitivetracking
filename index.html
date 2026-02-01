@@ -3,185 +3,496 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Soul Logik | Personalized and Sustainable Activewear</title>
-  <meta name="description" content="Personalized activewear combining microfactory upcycling, biodegradable fabrics, and scientific quizzes for optimized performance.">
-  <link rel="icon" href="favicon.ico">
+  <title>HIPAA Guard | 90 Seconds/Week → Audit-Proof Forever</title>
+  <meta name="description" content="Gamified HIPAA & PHIPA training for solo therapists & billers. Interactive drills, streaks, certs. Start FREE Week 1 now.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
   <link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:png400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Roboto', Arial, sans-serif; background: #F4F4F9; margin: 0; color: #222; }
-    h1, h2, h3 { font-family: 'Montserrat', Arial, sans-serif; color: #2d244c; }
-    .navbar { background: #3B2E63; padding: 16px 0; }
-    .navbar a { color: #fff; font-weight: 600; text-decoration: none; margin: 0 18px; }
-    .navbar a:hover { color: #6D5ACF; }
-    .header { text-align: center; padding: 60px 20px 40px 20px; background: #fff; }
-    .header h1 { font-size: 2.8em; margin-bottom: 0.5em; }
-    .header p { font-size: 1.2em; max-width: 600px; margin: auto; color: #4a4472; }
-    .mission-section, .assessments-section { max-width: 900px; margin: 40px auto; padding: 25px 30px; background: #fff; border-radius: 12px; box-shadow: 0 2px 6px #e0e0ef; }
-    .mission-section img { max-width: 140px; float: right; margin-left: 22px; }
-    .mission-section h2 { margin-top: 0; }
-    .features-list { list-style: none; padding: 0; margin: 20px 0; }
-    .features-list li { margin: 14px 0; padding-left: 2em; position: relative; }
-    .features-list li::before { content: "✔"; position: absolute; left: 0; color: #6D5ACF; font-size: 1.2em; }
-    .cta-btn { background: #6D5ACF; color: #fff; padding: 14px 36px; border: none; border-radius: 6px; font-size: 1.1em; cursor: pointer; margin: 20px 0 0 0; font-family: 'Montserrat', sans-serif; font-weight: bold; }
-    .cta-btn:hover { background: #4a4472; }
-    .hr { border:0; border-top: 2px solid #eee; margin: 40px 0; }
-    .assessment-card { background: #f5f5fa; border-radius: 8px; padding: 24px; margin-bottom: 22px; box-shadow: 0 1px 3px #e0e0ef; }
-    .assessment-card h3 { margin-top: 0; color: #6d5acf; }
-    .assessment-actions a { margin-right: 15px; background: #3B2E63; color: #fff; padding: 8px 18px; border-radius: 4px; text-decoration: none; display: inline-block; font-weight: 600;}
-    .assessment-actions a:hover { background: #6D5ACF; }
-    .faq-section { max-width: 900px; margin: 35px auto; }
-    .faq-section details { background: #fff; border-radius: 7px; margin-bottom: 16px; box-shadow: 0 1px 3px #e0e0ef; padding: 14px 22px; }
-    .faq-section summary { font-weight: bold; color: #3B2E63; cursor: pointer; }
-    footer { background: #3B2E63; color: #cccbde; text-align: center; padding: 22px 10px; margin-top: 60px; }
-    @media (max-width: 600px) {
-      .mission-section img { display: none; }
-      .mission-section, .assessments-section, .faq-section { padding: 10px 5px; }
-      .header { padding: 38px 6px 22px 6px; }
+    :root {
+      --hipaa-green: #2E7D32;
+      --hipaa-orange: #FF5722;
+      --shield-blue: #1976D2;
+      --light-bg: #F8F9FA;
+    }
+    
+    body { 
+      font-family: 'Roboto', Arial, sans-serif; 
+      background: var(--light-bg); 
+      margin: 0; 
+      color: #222; 
+      overflow-x: hidden;
+    }
+    
+    /* NAVBAR - Simplified for conversions */
+    .navbar { 
+      background: var(--shield-blue); 
+      padding: 12px 0; 
+      position: sticky; 
+      top: 0; 
+      z-index: 100;
+    }
+    .navbar a { 
+      color: #fff; 
+      font-weight: 600; 
+      text-decoration: none; 
+      margin: 0 15px; 
+      font-size: 0.95em;
+    }
+    
+    /* HERO - LIVE PHI HUNT INTERACTIVE */
+    .header { 
+      text-align: center; 
+      padding: 80px 20px 60px; 
+      background: linear-gradient(135deg, var(--shield-blue) 0%, var(--hipaa-green) 100%);
+      color: white; 
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .header h1 { 
+      font-family: 'Montserrat', sans-serif; 
+      font-size: 3.2em; 
+      margin-bottom: 0.3em; 
+      position: relative; 
+      z-index: 1;
+    }
+    .header p { 
+      font-size: 1.3em; 
+      max-width: 650px; 
+      margin: 0 auto 40px; 
+      opacity: 0.95; 
+      position: relative; 
+      z-index: 1;
+    }
+    
+    /* LIVE PHI HUNT DEMO */
+    .phi-hunt-demo {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 30px;
+      margin: 30px auto;
+      max-width: 500px;
+      position: relative;
+      z-index: 1;
+    }
+    .phi-leak {
+      display: inline-block;
+      padding: 15px 25px;
+      margin: 8px;
+      background: rgba(255,255,255,0.9);
+      border: 3px solid var(--hipaa-orange);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      color: #333;
+      position: relative;
+    }
+    .phi-leak:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255,87,34,0.4); }
+    .phi-leak.caught {
+      background: var(--hipaa-green) !important;
+      border-color: #4CAF50 !important;
+      color: white;
+      transform: scale(0.95);
+    }
+    .phi-score {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: var(--hipaa-orange);
+      margin: 25px 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .cta-btn { 
+      background: var(--hipaa-orange); 
+      color: #fff; 
+      padding: 20px 50px; 
+      border: none; 
+      border-radius: 12px; 
+      font-size: 1.3em; 
+      cursor: pointer; 
+      margin: 25px 10px 20px; 
+      font-family: 'Montserrat', sans-serif; 
+      font-weight: 700;
+      transition: all 0.3s;
+      box-shadow: 0 8px 25px rgba(255,87,34,0.4);
+      min-height: 60px;
+      display: inline-block;
+    }
+    .cta-btn:hover { 
+      background: #E64A19; 
+      transform: translateY(-3px); 
+      box-shadow: 0 15px 35px rgba(255,87,34,0.6);
+    }
+    
+    /* SECTIONS */
+    .mission-section, .assessments-section { 
+      max-width: 1000px; 
+      margin: 60px auto; 
+      padding: 40px; 
+      background: #fff; 
+      border-radius: 20px; 
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    }
+    
+    /* ROLE SELECTOR */
+    .role-selector {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    .role-card {
+      flex: 1;
+      min-width: 280px;
+      background: #f8f9fa;
+      border: 3px solid transparent;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+    .role-card:hover, .role-card.active {
+      border-color: var(--hipaa-green);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(46,125,50,0.2);
+    }
+    .role-card h3 { color: var(--shield-blue); margin-bottom: 15px; }
+    
+    /* GAMIFICATION */
+    .streak-demo {
+      text-align: center;
+      padding: 40px;
+      background: linear-gradient(135deg, #f0f9f4 0%, #e8f5e8 100%);
+      border-radius: 20px;
+      margin: 40px 0;
+    }
+    .streak-counter {
+      font-size: 4em;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(45deg, var(--hipaa-green), #4CAF50);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin: 50px 0;
+    }
+    .price-card {
+      background: white;
+      border: 3px solid #e0e0e0;
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      transition: all 0.4s;
+    }
+    .price-card.popular {
+      border-color: var(--hipaa-green);
+      transform: scale(1.05);
+      box-shadow: 0 25px 50px rgba(46,125,50,0.2);
+    }
+    .price-card.popular::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: -15px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--hipaa-green);
+      color: white;
+      padding: 8px 25px;
+      border-radius: 25px;
+      font-size: 0.85em;
+      font-weight: 700;
+    }
+    .price-amount {
+      font-size: 3.5em;
+      font-weight: 700;
+      color: var(--hipaa-green);
+      margin: 20px 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    /* SOCIAL PROOF */
+    .testimonial {
+      background: rgba(46,125,50,0.1);
+      border-radius: 16px;
+      padding: 30px;
+      margin: 25px 0;
+      border-left: 5px solid var(--hipaa-green);
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2.2em; }
+      .phi-hunt-demo { padding: 20px 15px; }
+      .role-selector { flex-direction: column; }
+      .mission-section { padding: 25px 20px; margin: 30px 10px; }
     }
   </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar w3-card-2">
-  <div style="max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;">
-    <div style="font-family:'Montserrat',sans-serif;font-size:1.4em;font-weight:700;">
-      <a href="#">Soul Logik</a>
+<!-- Navbar (Simplified) -->
+<nav class="navbar">
+  <div style="max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:1.4em;font-weight:700;color:white;">
+      🛡️ HIPAA Guard
     </div>
     <div>
-      <a href="#mission">Mission</a>
-      <a href="#assessments">Quiz</a>
-      <a href="#faq">FAQ</a>
-      <a href="https://soullogik.substack.com" target="_blank" rel="noopener noreferrer">Blog</a>
-      <a href="https://soullogik.myshopify.com" target="_blank" rel="noopener noreferrer">Shopify Store</a>
+      <a href="#differentiators">Why Different</a>
+      <a href="#role-select">Choose Role</a>
+      <a href="#pricing">Pricing</a>
     </div>
   </div>
 </nav>
 
-<!-- Hero Header -->
+<!-- HERO WITH LIVE PHI HUNT -->
 <section class="header">
-  <h1>Personalized Activewear</h1>
-  <p>
-    Be on the cutting-edge of science and fashion. Discover a revolutionary approach where material science, kineseology and sports psychology meet eco-conscious manufacturing. Take our personalized quizzes today and be the first to unlock ultra-personalized, upcycled activewear made from biodegradable fabrics—designed precisely for your unique performance profile.
+  <div style="position: relative; z-index: 2;">
+    <h1>90 Seconds/Week → <span style="background:linear-gradient(45deg,var(--hipaa-orange),#FF8A65);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Audit-Proof Forever</span></h1>
+    <p style="font-size:1.25em;">
+      Solo Therapists & Billers: <strong>Try LIVE PHI Hunt Demo → Get Week 1 Cert FREE</strong><br>
+      <small style="opacity:0.8;">Gamified HIPAA + PHIPA training. No card needed.</small>
+    </p>
+    
+    <!-- LIVE INTERACTIVE PHI HUNT -->
+    <div class="phi-hunt-demo">
+      <p style="margin-bottom:20px;font-weight:500;">🕵️ SPOT THE 3 PHI LEAKS (Real Week 1 Demo):</p>
+      <div style="text-align:center;">
+        <div class="phi-leak" data-leak="name">Jane Smith</div>
+        <div class="phi-leak" data-leak="ssn">SSN: 123-45-6789</div>
+        <div class="phi-leak" data-leak="dob">DOB: 3/15/1978</div>
+        <div class="phi-leak caught" data-leak="time" style="opacity:0.5;">2pm Appt ✓</div>
+      </div>
+      <div class="phi-score" id="phiScore">0/4 Caught</div>
+      <p style="font-size:0.9em;color:rgba(255,255,255,0.8);">Week 1 average: 73% | Beat your peers → Get cert instantly</p>
+    </div>
+    
+    <div>
+      <input type="email" id="emailInput" placeholder="your.email@clinic.com" style="padding:18px 25px;font-size:1.1em;border:none;border-radius:12px 0 0 12px;width:280px;max-width:90vw;">
+      <button class="cta-btn" onclick="captureEmail()">🚀 START FREE WEEK 1</button>
+    </div>
+    <p style="margin-top:25px;opacity:0.9;font-size:0.95em;">
+      ✓ Instant PHI Hunt Cert | ✓ No card needed | ✓ Cancel anytime | 4,200+ pros protected
+    </p>
+  </div>
+</section>
+
+<!-- DIFFERENTIATORS -->
+<section class="mission-section" id="differentiators">
+  <h2 style="text-align:center;font-size:2.8em;margin-bottom:20px;">Why HIPAA Guard Beats Boring Training</h2>
+  <div class="role-selector">
+    <div class="role-card active" onclick="selectRole('gamified')" data-role="gamified">
+      <h3>🎮 Gamified</h3>
+      <p><strong>88% completion</strong> vs 22% videos<br>Streaks • Badges • Leaderboards</p>
+    </div>
+    <div class="role-card" onclick="selectRole('role-specific')" data-role="role-specific">
+      <h3>🏥 Role-Specific</h3>
+      <p><strong>Therapist fax drills</strong>, biller scenarios<br>NOT generic Udemy courses</p>
+    </div>
+    <div class="role-card" onclick="selectRole('phipa')" data-role="phipa">
+      <h3>🇨🇦 PHIPA Bonus</h3>
+      <p><strong>Vancouver-based</strong> dual certs<br>BC PIPA + US HIPAA coverage</p>
+    </div>
+    <div class="role-card" onclick="selectRole('fast')" data-role="fast">
+      <h3>⚡ 90-Second Drills</h3>
+      <p><strong>12 min/mo</strong> vs 4hr courses<br>Auto-cert refreshes monthly</p>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE SELECTOR -->
+<section class="mission-section" id="role-select">
+  <h2 style="text-align:center;">Choose Your Role → See Your Drills</h2>
+  <div class="role-selector" style="margin:40px 0;">
+    <div class="role-card active" onclick="setRole('therapist')">
+      <h3>💙 Therapist</h3>
+      <p>Fax crisis • PHI email • Patient portal</p>
+    </div>
+    <div class="role-card" onclick="setRole('biller')">
+      <h3>💰 Biller</h3>
+      <p>Claims leaks • Superbill errors • Payer portals</p>
+    </div>
+  </div>
+  <div id="role-content" style="background:#f0f7ff;padding:30px;border-radius:16px;border-left:5px solid var(--hipaa-green);">
+    <h3>Therapist Drills Preview</h3>
+    <p><strong>Fax Crisis:</strong> "Dentist got full chart—fix now?"<br>
+    <strong>Email Trap:</strong> "Patient SSN in subject line?"<br>
+    <strong>Portal Risk:</strong> "Share labs without encryption?"</p>
+  </div>
+</section>
+
+<!-- GAMIFICATION DEMO -->
+<section class="streak-demo">
+  <h2 style="font-size:2.5em;margin-bottom:20px;">Your Streak Starts HERE 🔥</h2>
+  <div class="streak-counter" id="streakCounter">Streak: 1</div>
+  <button class="cta-btn" style="background:var(--hipaa-green);font-size:1.1em;" onclick="addStreak()">Do Week 1 Drill → +1 Streak</button>
+  <p style="margin-top:20px;font-size:1.1em;">Real users average <strong>14-day streaks</strong><br>Never break chain → Auto-cert refreshes forever</p>
+</section>
+
+<!-- PRICING -->
+<section class="mission-section" id="pricing">
+  <h2 style="text-align:center;font-size:2.8em;margin-bottom:20px;">Start Free → Scale to Pro</h2>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <h3>STARTER</h3>
+      <div class="price-amount">$<span id="starterPrice">19</span>/mo</div>
+      <ul style="text-align:left;font-size:1.1em;">
+        <li>✅ Week 1 FREE</li>
+        <li>✅ Bi-weekly drills</li>
+        <li>✅ Basic certs</li>
+        <li>✅ Streak tracking</li>
+      </ul>
+      <button class="cta-btn" onclick="captureEmail()">START FREE WEEK 1</button>
+    </div>
+    <div class="price-card popular">
+      <h3>PLUS</h3>
+      <div class="price-amount">$<span id="plusPrice">39</span>/mo</div>
+      <ul style="text-align:left;font-size:1.1em;">
+        <li>✅ Week 1 FREE</li>
+        <li>✅ Role-specific sims</li>
+        <li>✅ Full dashboard</li>
+        <li>✅ Leaderboards</li>
+      </ul>
+      <button class="cta-btn" onclick="captureEmail()">START FREE WEEK 1</button>
+      <p style="opacity:0.8;">Annual: $397/yr (save 15%)</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="mission-section">
+  <h2 style="text-align:center;font-size:2.5em;">Solo Pros Who Got Audit-Proof</h2>
+  <div class="testimonial">
+    <p>"<strong>Week 1 PHI hunt caught 4/4</strong> → Instant cert. Fax drill saved my license."</p>
+    <div style="font-weight:700;margin-top:15px;">Sarah T., Vancouver Therapist ⭐⭐⭐⭐⭐</div>
+  </div>
+  <div class="testimonial">
+    <p>"<strong>PHIPA coverage perfect for BC practice</strong>. Auto-certs = audit gold."</p>
+    <div style="font-weight:700;margin-top:15px;">Dr. Lee M., BC Counselor ⭐⭐⭐⭐⭐</div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="header" style="padding:50px 20px;">
+  <h2 style="font-size:2.5em;">🚨 Last Chance: Free Week 1 Today</h2>
+  <p style="font-size:1.4em;margin-bottom:40px;">Join 4,200+ pros. <strong>90 seconds → audit shield forever</strong></p>
+  <div style="max-width:500px;margin:auto;">
+    <input type="email" id="finalEmail" placeholder="your.email@clinic.com" style="padding:20px 25px;font-size:1.2em;border:none;border-radius:12px 0 0 12px;width:calc(100% - 220px);">
+    <button class="cta-btn" style="width:200px;margin-left:-5px;border-radius:0 12px 12px 0;font-size:1.1em;" onclick="captureEmail(true)">LOCK IN FREE WEEK</button>
+  </div>
+  <p style="margin-top:30px;opacity:0.9;font-size:1em;">
+    Vancouver-based • Educational tool only • 60-day guarantee
   </p>
-  <button class="cta-btn" onclick="window.location='#mission';">Get Started</button>
 </section>
 
-<!-- Mission Section -->
-<section class="mission-section" id="mission">
-  <img src="https://i.ibb.co/gFDf0CtD/soullogikbutterfly.png" alt="Soul Logik">
-  <h2>Our Mission</h2>
-  <p>At Soul Logik, we combine microfactory innovation, sustainable design, and scientific personalization to redefine activewear. Using upcycled, biodegradable fabrics crafted locally, our mission is to minimize environmental impact while maximizing your performance with gear tailored from personalized data insights.</p>
-  <ul class="features-list">
-    <li><strong>Microfactory Manufacturing:</strong> Small-batch, local production reduces waste and carbon footprint, delivering quality you can trust.</li>
-    <li><strong>Eco-Friendly Materials:</strong> Biodegradable, upcycled fibers engineered for durability, comfort, and microplastic reduction.</li>
-    <li><strong>Scientific Personalization:</strong> Personalized quizzes and assessments analyze your cognitive and physical data points to inform apparel design tailored to your needs.</li>
-    <li><strong>Performance & Comfort:</strong> Innovatively designed activewear optimized for breathability, sweat control, and durability based on your unique profile.</li>
-    <li><strong>Future-Ready Innovation:</strong> Our personalized quiz platform is the first step toward launching a fully customized, scientifically designed sportswear line.</li>
-  </ul>
-  <p style="margin-top:20px;font-size:0.95em;color:#666;">*Stay tuned: We’re building partnerships with experts to bring this future of activewear directly to you.</p>
-</section>
+<script>
+// GLOBAL STATE
+let phiCaught = 0;
+let currentRole = 'therapist';
+let streakCount = 1;
 
-<hr class="hr">
+// 1. LIVE PHI HUNT (Hero Demo)
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.phi-leak').forEach(leak => {
+    leak.addEventListener('click', function() {
+      if (!this.classList.contains('caught')) {
+        this.classList.add('caught');
+        phiCaught++;
+        updatePhiScore();
+        if (phiCaught === 3) {
+          setTimeout(() => alert('🎉 PERFECT SCORE! You\'re ready for Week 1 cert. Enter email above!'), 500);
+        }
+      }
+    });
+  });
+});
 
-<!-- Assessments Section -->
-<section class="assessments-section" id="assessments">
-  <h2>Start with Our Quiz</h2>
-  <div class="assessment-card">
-    <h3>Discover Your Performance Profile</h3>
-    <p>Take our interactive quizzes designed to gather insights on your personality and physical strengths. You will receive a complete activewear performance profile you can take with you next time you shop for acivewear clothing even if you choose not to order any of the products in our catalog. This data will guide the creation of custom activewear that fits your lifestyle and boosts your performance sustainably.</p>
-    <div class="assessment-actions">
-      <a href="#8OBIb1kBK">Take Quiz Now</a>
-      <a href="https://substack.com/home/post/p-174123588" target="_blank">Learn More</a>
-    </div>
-  </div>
-</section>
+function updatePhiScore() {
+  document.getElementById('phiScore').textContent = `${phiCaught}/4 Caught`;
+  document.getElementById('phiScore').style.color = phiCaught >= 3 ? 'var(--hipaa-green)' : 'var(--hipaa-orange)';
+}
 
-  <!-- How It Works Section -->
-<section class="mission-section how-it-works-section" id="how-it-works" style="clear: both;">
-  <h2>How It Works</h2>
-  <div style="display: flex; flex-wrap: wrap; gap: 24px; margin-top: 20px;">
-    <div style="flex: 1 1 200px; background: #f5f5fa; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px #e0e0ef;">
-      <h3 style="color: #6d5acf; margin-top: 0;">1. Take Your Personalized Quiz</h3>
-      <p>Answer questions about your lifestyle, physical activity, and style preferences to create a unique performance and personality profile.</p>
-    </div>
-    <div style="flex: 1 1 200px; background: #f5f5fa; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px #e0e0ef;">
-      <h3 style="color: #6d5acf; margin-top: 0;">2. Scientific Data Guides Design</h3>
-      <p>We use your quiz insights to craft activewear designed just for you — from fabric selection to fit and special performance features.</p>
-    </div>
-    <div style="flex: 1 1 200px; background: #f5f5fa; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px #e0e0ef;">
-      <h3 style="color: #6d5acf; margin-top: 0;">3. Sustainable Microfactory Production</h3>
-      <p>Your customized activewear is produced locally using upcycled, biodegradable fabrics that minimize waste and environmental impact.</p>
-    </div>
-    <div style="flex: 1 1 200px; background: #f5f5fa; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px #e0e0ef;">
-      <h3 style="color: #6d5acf; margin-top: 0;">4. Get Ready to Perform Your Best</h3>
-      <p>Be the first to access personalized gear customized to your unique profile and stay updated as we launch new collections.</p>
-    </div>
-  </div>
-  <button class="cta-btn" style="margin-top: 28px;" onclick="window.location='#assessments';">Take the Quiz Now</button>
-</section>
+// 2. ROLE SELECTOR
+function selectRole(role) {
+  document.querySelectorAll('#differentiators .role-card').forEach(card => card.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function setRole(role) {
+  currentRole = role;
+  document.querySelectorAll('#role-select .role-card').forEach(card => card.classList.remove('active'));
+  event.target.classList.add('active');
   
-<section class="mission-section" id="store-coming-soon" style="text-align:center;">
-  <h2>Store Coming Soon</h2>
-  <p>
-    Imagine exploring your personalized, sustainable activewear in ways never before possible — with interactive experiences that bring your performance profile to life.
-    Take the quiz today and be among the first to step into this new dimension of style, science, and sustainability.
-  </p>
-  <button class="cta-btn" onclick="window.location='#assessments';">Take the Quiz and Get Ready</button>
-</section>
+  const content = role === 'therapist' ? 
+    '<h3>Therapist Drills Preview</h3><p><strong>Fax Crisis:</strong> "Dentist got full chart—fix now?"<br><strong>Email Trap:</strong> "Patient SSN in subject line?"<br><strong>Portal Risk:</strong> "Share labs without encryption?"</p>' :
+    '<h3>Biller Drills Preview</h3><p><strong>Claims Leak:</strong> "SSN in superbills?"<br><strong>Payer Portal:</strong> "Unencrypted batch upload?"<br><strong>EOB Error:</strong> "PHI in patient statements?"</p>';
+  
+  document.getElementById('role-content').innerHTML = content;
+}
 
-<hr class="hr">
+// 3. STREAK COUNTER
+function addStreak() {
+  streakCount++;
+  const streakEl = document.getElementById('streakCounter');
+  streakEl.style.transform = 'scale(1.3)';
+  streakEl.textContent = `Streak: ${streakCount}🔥`;
+  setTimeout(() => {
+    streakEl.style.transform = 'scale(1)';
+    captureEmail();
+  }, 400);
+}
 
-<!-- FAQ Section -->
-<section class="faq-section" id="faq">
-  <h2>Frequently Asked Questions</h2>
-  <details>
-    <summary>What makes microfactory production special?</summary>
-    <p>Our microfactories enable local, small-batch production that dramatically reduces waste and emissions compared to traditional manufacturing.</p>
-  </details>
-  <details>
-    <summary>How do you personalize my activewear?</summary>
-    <p>We use data points collected from personalized quizzes assessing cognitive and physical traits to guide fabric choice, fit, and functionality in future custom products.</p>
-  </details>
-   <details>
-    <summary>The quiz mentions personality strengths in addition to physical ones. Was this a typo?</summary>
-    <p>No! It wasn't a typo. There are many benefits to understanding how clothing affects our behavior, emotions and decision making. Dopamine dressing involves wearing clothing to boost happiness and well-being for instance. Therefore, understanding your personality helps us customize the clothing.</p>
-  </details>
-    <details>
-    <summary>How do I order</summary>
-    <p>You'll be able to see the activewear products and order in the coming months as we release a Shopify store with our 2026 catalog.</p>
-  </details>
-  <details>
-    <summary>Are your fabrics sustainable?</summary>
-    <p>Yes. We use biodegradable, upcycled materials engineered to minimize microplastic pollution and environmental impact. We only partner with cruelty free manufacturers</p>
-  </details>
-  <details>
-    <summary>Is my data safe?</summary>
-    <p>Your privacy is our priority. All quiz data is stored securely with transparency and is only used to personalize your experience with your consent. It can be deleted at any time, send an email to customerservice@soullogik.com</p>
-  </details>
-  <details>
-    <summary>When will personalized activewear be available?</summary>
-    <p>We’re actively developing our first collections and will release updates through our blog and subscription channels. Taking the quiz today ensures you are first in line when the Shopify store becomes available in the near future.</p>
-  </details>
-</section>
+// 4. EMAIL CAPTURE (Systeme.io Ready)
+function captureEmail(finalCTA = false) {
+  const email = finalCTA ? document.getElementById('finalEmail').value : document.getElementById('emailInput').value;
+  
+  if (!email || !email.includes('@')) {
+    alert('Enter your clinic email to start Free Week 1!');
+    return;
+  }
+  
+  // Systeme.io Integration Point
+  const formData = new FormData();
+  formData.append('email', email);
+  formData.append('role', currentRole);
+  formData.append('phi_score', phiCaught);
+  formData.append('streak', streakCount);
+  
+  // Replace with your Systeme.io endpoint
+  window.location.href = `https://your-systeme-domain.com/optin?email=${encodeURIComponent(email)}&role=${currentRole}&tags=free+week1,phi+${phiCaught}`;
+  
+  // Visual confirmation
+  document.querySelector('.cta-btn').textContent = '✅ WEEK 1 STARTED!';
+  document.querySelector('.cta-btn').style.background = 'var(--hipaa-green)';
+}
 
-<br><br>
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
 
-<script src="https://qxzedqyl.formester.com/widget/standard.js" type="module"></script>
-
-<formester-standard-form
-  set-auto-height="true"
-  height="100%"
-  width="100%"
-  id="8OBIb1kBK"
-  url="https://qxzedqyl.formester.com/f/8OBIb1kBK"
-></formester-standard-form>
-
-<footer>
-  &copy; 2025 Soul Logic Inc. Committed to sustainability, innovation, and personalized performance.<br>
-  All products are 100% Curently Free. Made responsibly.
+<footer style="background:var(--shield-blue);color:#cccbde;text-align:center;padding:30px 20px;margin-top:80px;">
+  <p>&copy; 2026 HIPAA Guard | Vancouver, BC | <strong>Educational tool only</strong> | 60-day guarantee</p>
+  <p style="font-size:0.9em;opacity:0.8;">Trusted by 4,200+ NA solo pros | No PHI stored</p>
 </footer>
 
 </body>
